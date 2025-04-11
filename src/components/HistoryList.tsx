@@ -13,9 +13,7 @@ export const HistoryList: React.FC = () => {
         {history.map((entry, index) => (
           <ClipboardItem
             key={index}
-            content={entry.content}
-            timestamp={entry.timestamp}
-            onClick={() => navigator.clipboard.writeText(entry.content)}
+            item={entry}
           />
         ))}
       </div>
