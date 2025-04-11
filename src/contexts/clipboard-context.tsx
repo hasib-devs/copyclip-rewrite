@@ -6,8 +6,9 @@ export const ClipboardContext = createContext<ClipboardContextType | undefined>(
 export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children }) => {
     const [history, setHistory] = useState<ClipboardEntry[]>([
         {
+            id: '1',
             content: "Hello world",
-            timestamp: Date.now().toString()
+            type: "text"
         }
     ]);
 
