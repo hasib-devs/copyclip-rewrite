@@ -1,34 +1,10 @@
 import { Heading } from "@radix-ui/themes";
-import { invoke } from "@tauri-apps/api/core";
-import { listen } from "@tauri-apps/api/event";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ClipboardItem } from "./ClipboardItem";
-
-interface ClipboardEntry {
-  content: string;
-  timestamp: string;
-}
+import { useClipboardContext } from "../hooks";
 
 export const HistoryList: React.FC = () => {
-  const [history, setHistory] = useState<ClipboardEntry[]>([
-    {
-      content: "Hello world",
-      timestamp: Date.now().toString()
-    }
-  ]);
-
-  useEffect(() => {
-    const unlisten = listen<ClipboardEntry>("clipboard_update", (event) => {
-      setHistory((prev) => [event.payload, ...prev]);
-    });
-
-    invoke("start_clipboard_monitor");
-
-    return () => {
-      unlisten.then((fn) => fn());
-    };
-  }, []);
-
+  const { history } = useClipboardContext();
   return (
     <div className="p-4">
       <Heading>📋 Clipboard History</Heading>
