@@ -7,7 +7,7 @@ edition = "2021"
 
 
 [lib]
-name = "copyclip_lib"
+name = "lib"
 crate-type = [ "staticlib", "cdylib", "rlib" ]
 
 

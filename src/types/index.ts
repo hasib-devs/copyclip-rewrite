@@ -10,6 +10,8 @@ export type ClipboardEntry = {
 export type ClipboardContextType = {
     history: ClipboardEntry[],
     setHistory: Dispatch<React.SetStateAction<ClipboardEntry[]>>;
+    start(): Promise<() => Promise<void>>;
+    stop(): Promise<void>;
 };
 
 export type ClipboardPayload = Omit<ClipboardEntry, "id">;
