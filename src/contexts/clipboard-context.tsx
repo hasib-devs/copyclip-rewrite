@@ -1,81 +1,45 @@
-import { createContext, FC, ReactElement, useEffect, useState } from "react";
+import { createContext, FC, ReactElement, useCallback, useEffect, useRef, useState } from "react";
+import { startListening } from "tauri-plugin-clipboard-api";
 import { ClipboardContextType, ClipboardEntry } from "../types";
-import { listenToMonitorStatusUpdate, onImageUpdate, onTextUpdate, startListening, stopMonitor } from "tauri-plugin-clipboard-api";
-import { UnlistenFn } from "@tauri-apps/api/event";
+import { setupListeners } from "../utils/core";
 
 export const ClipboardContext = createContext<ClipboardContextType | undefined>(undefined);
 
 export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children }) => {
     const [isRunning, setIsRunning] = useState(true);
-    const [history, setHistory] = useState<ClipboardEntry[]>([
-        {
-            id: '1',
-            content: "Hello world",
-            type: "text"
-        }
-    ]);
+    const [history, setHistory] = useState<ClipboardEntry[]>([]);
+    const abortControllerRef = useRef<AbortController>();
 
-    let unlistenClipboard: () => Promise<void>;
-    let unlistenTextUpdate: UnlistenFn;
-    let unlistenImageUpdate: UnlistenFn;
+    const stop = useCallback(() => {
+        abortControllerRef.current?.abort();
+    }, []);
 
-    async function stop() {
-        if (isRunning && unlistenClipboard) await unlistenClipboard();
-    }
-
-    async function start() {
-        if (isRunning) await stop();;
-
-        return await startListening();
-
-    }
+    const start = useCallback(async () => {
+        stop();
+        abortControllerRef.current = new AbortController();
+        return startListening();
+    }, [stop]);
 
     useEffect(() => {
-        (async () => {
-            await listenToMonitorStatusUpdate((running) => {
-                console.log(`Monitor Running Status: ${running ? 'Yes' : 'No'}`);
-                setIsRunning(running);
-            });
-
-            unlistenClipboard = await start();
-
-            unlistenTextUpdate = await onTextUpdate((newText) => {
-                const entry: ClipboardEntry = {
-                    id: crypto.randomUUID(),
-                    type: "text",
-                    content: newText
-                };
-                setHistory((prevState) => [entry, ...prevState]);
-            });
-
-            unlistenImageUpdate = await onImageUpdate((b64Str) => {
-                const entry: ClipboardEntry = {
-                    id: crypto.randomUUID(),
-                    type: "image",
-                    content: b64Str
-                };
-                setHistory((prevState) => [entry, ...prevState]);
-            });
-        })();
+        setupListeners({
+            abortControllerRef,
+            setHistory,
+            setIsRunning,
+        });
 
         return () => {
-            (async () => {
-                if (unlistenTextUpdate) unlistenTextUpdate();
-                if (unlistenImageUpdate) unlistenImageUpdate();
-
-                if (unlistenClipboard) await unlistenClipboard();
-                if (isRunning) await stopMonitor();
-            })();
+            abortControllerRef.current?.abort();
         };
-
     }, []);
 
     const value: ClipboardContextType = {
         history,
         setHistory,
         start,
-        stop
+        stop,
+        isRunning
     };
+
     return (
         <ClipboardContext.Provider value={value}>{children}</ClipboardContext.Provider>
     );

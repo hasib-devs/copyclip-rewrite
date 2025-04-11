@@ -1,6 +1,7 @@
 import { Box, Card, Text } from "@radix-ui/themes";
 import { FC, ReactElement } from "react";
 import { ClipboardEntry } from "../types";
+import { maskCreditCards } from "../utils/helpers";
 
 interface ClipboardItemProps {
   item: ClipboardEntry;
@@ -11,7 +12,9 @@ const TextItem = ({ item }: { item: ClipboardEntry; }) => {
 };
 
 const ImageItem = ({ item }: { item: ClipboardEntry; }) => {
-  return <Text>{item.content}</Text>;
+  return <Text>{
+    maskCreditCards(item.content)
+  }</Text>;
 };
 
 export const ClipboardItem: FC<ClipboardItemProps> = ({
