@@ -534,7 +534,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "copyclip-rewrite"
+name = "copyclip"
 version = "0.1.0"
 dependencies = [
  "serde",

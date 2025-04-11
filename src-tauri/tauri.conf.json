@@ -1,6 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "copyclip-rewrite",
+  "productName": "copyclip",
   "version": "0.1.0",
   "identifier": "copyclip.hasib.dev",
   "build": {
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "copyclip-rewrite",
+        "title": "copyclip",
         "width": 800,
         "height": 600
       }
