@@ -1,6 +1,6 @@
 pub mod clipboard;
 
 #[tauri::command]
-pub fn greet() -> String {
+pub(crate) fn greet() -> String {
     format!("Welcome to Copyclip")
 }
