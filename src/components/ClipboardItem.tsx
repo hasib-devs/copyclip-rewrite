@@ -1,4 +1,4 @@
-import { Box, Card, Text } from "@radix-ui/themes";
+import { Avatar, Box, Card, Text } from "@radix-ui/themes";
 import { FC, ReactElement } from "react";
 import { ClipboardEntry } from "../types";
 import { maskCreditCards } from "../utils/helpers";
@@ -8,13 +8,15 @@ interface ClipboardItemProps {
 }
 
 const TextItem = ({ item }: { item: ClipboardEntry; }) => {
-  return <Text>{item.content}</Text>;
-};
-
-const ImageItem = ({ item }: { item: ClipboardEntry; }) => {
   return <Text>{
     maskCreditCards(item.content)
   }</Text>;
+};
+
+const ImageItem = ({ item }: { item: ClipboardEntry; }) => {
+  return (
+    <img src={`data:image/*;base64, ${item.content}`} alt="Fail to load image" />
+  );
 };
 
 export const ClipboardItem: FC<ClipboardItemProps> = ({
