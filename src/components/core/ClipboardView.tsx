@@ -1,5 +1,5 @@
 import * as ScrollArea from '@radix-ui/react-scroll-area';
-import { useClipboard } from '../../hooks';
+import { useClipboard } from '@/hooks';
 import { ClipboardItem } from './ClipboardItem';
 import { SearchBar } from './Searchbar';
 

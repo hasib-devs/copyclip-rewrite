@@ -1,4 +1,4 @@
-import { DBOptions, QueryParams } from "../types";
+import { DBOptions, QueryParams } from "@/types";
 import { DB_NAME, STORE_NAME } from "../utils/constants";
 
 export const indexedDBConfig: DBOptions = {

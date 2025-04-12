@@ -1,6 +1,6 @@
 import { createContext, FC, ReactElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { startListening, writeImageBase64, writeText } from "tauri-plugin-clipboard-api";
-import { ClipboardContextType, ClipboardEntry, ClipboardPayload } from "../types";
+import { ClipboardContextType, ClipboardEntry, ClipboardPayload } from "@/types";
 import { setupListeners } from "../utils/core";
 
 export const ClipboardContext = createContext<ClipboardContextType | undefined>(undefined);

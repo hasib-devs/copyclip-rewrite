@@ -1,4 +1,4 @@
-import { createContext, ReactElement, useState } from "react";
+import { createContext, ReactElement } from "react";
 
 export type DatabaseContextType = {
 };

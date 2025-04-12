@@ -1,4 +1,4 @@
-import { ClipboardEntry } from '../../types';
+import { ClipboardEntry } from '@/types';
 
 export const ClipboardItem = ({ entry }: { entry: ClipboardEntry; }) => {
 

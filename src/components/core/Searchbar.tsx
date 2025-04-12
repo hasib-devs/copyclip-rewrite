@@ -1,6 +1,6 @@
 // components/search-bar.tsx
 import { useEffect, useState } from 'react';
-import { useClipboard } from '../../hooks';
+import { useClipboard } from '@/hooks';
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons';
 
 export const SearchBar = () => {

@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { ClipboardContext } from "../contexts/clipboard-context";
-import { DatabaseContext } from "../contexts/db-context";
+import { ClipboardContext } from "@/contexts/clipboard-context";
+import { DatabaseContext } from "@/contexts/db-context";
 
 export function useClipboard() {
     const context = useContext(ClipboardContext);

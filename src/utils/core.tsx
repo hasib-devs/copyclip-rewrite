@@ -1,6 +1,6 @@
 import { Dispatch, MutableRefObject, SetStateAction } from "react";
 import { listenToMonitorStatusUpdate, onImageUpdate, onTextUpdate, startListening } from "tauri-plugin-clipboard-api";
-import { ClipboardPayload } from "../types";
+import { ClipboardPayload } from "@/types";
 
 export type SetupListenersProps = {
     abortControllerRef: MutableRefObject<AbortController | undefined>;
@@ -22,7 +22,7 @@ export async function setupListeners({ abortControllerRef: abortRef, setIsRunnin
             // Order 1
             listenToMonitorStatusUpdate((running) => {
                 if (signal.aborted) return;
-                console.log(`Monitor Running Status: ${running ? 'Yes' : 'No'}`);
+                console.log(`Monitor Running Status: ${running ? 'On' : 'Off'}`);
                 setIsRunning(running);
             }),
 
@@ -31,7 +31,8 @@ export async function setupListeners({ abortControllerRef: abortRef, setIsRunnin
                 if (signal.aborted) return;
                 addEntry({
                     type: "text",
-                    content: newText
+                    content: newText,
+                    contentType: 'text/plain'
                 });
             }),
 
@@ -41,7 +42,8 @@ export async function setupListeners({ abortControllerRef: abortRef, setIsRunnin
 
                 addEntry({
                     type: "image",
-                    content: b64Str
+                    content: b64Str,
+                    contentType: 'image/png'
                 });
             })
         ]);
