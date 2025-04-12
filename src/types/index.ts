@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 
 export type ClipboardEntry = {
     id: string;
@@ -8,15 +9,20 @@ export type ClipboardEntry = {
 };
 
 export type ClipboardContextType = {
-    history: ClipboardEntry[],
+    filteredHistory: ClipboardEntry[];
     addEntry: (newEntry: ClipboardEntry) => void;
     start(): Promise<() => Promise<void>>;
     stop(): void;
     isRunning: boolean;
     searchClipboard: (query: string) => ClipboardEntry[];
+    searchQuery: string;
+    setSearchQuery: Dispatch<SetStateAction<string>>;
+    copyToClipboard: (content: string, type: "text" | "image") => Promise<void>;
+    clearHistory: () => void;
+    deleteEntry: (id: string) => void;
 };
 
-export type ClipboardPayload = Omit<ClipboardEntry, "id">;
+export type ClipboardPayload = Omit<ClipboardEntry, "id" | "timestamp">;
 
 export type ClipboardListener = {
     start: () => Promise<void>;
