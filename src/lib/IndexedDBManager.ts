@@ -9,7 +9,6 @@ export class IndexedDBManager<T extends { id: string; }> {
     }
 
     async initialize(): Promise<IDBDatabase> {
-        console.log("Initializing Database");
         return new Promise((resolve, reject) => {
             const request = indexedDB.open(this.options.name, this.options.version);
 
@@ -87,42 +86,7 @@ export class IndexedDBManager<T extends { id: string; }> {
         );
     }
 
-    // Advanced Querying
-    // async query(storeName: string, params: QueryParams = {}): Promise<T[]> {
-    //     return this.transaction<IDBCursorWithValue | null, T[]>(storeName, 'readonly', (store) => {
-    //         const target = params.indexName
-    //             ? store.index(params.indexName)
-    //             : store;
-
-    //         const request = target.openCursor(params.range, params.direction);
-    //         const results: T[] = [];
-    //         let count = 0;
-
-    //         return new Promise((resolve, reject) => {
-    //             request.onsuccess = (event) => {
-    //                 const cursor = (event.target as IDBRequest<IDBCursorWithValue>).result;
-    //                 if (cursor) {
-    //                     if (!params.filter || params.filter(cursor.value)) {
-    //                         results.push(cursor.value);
-    //                         count++;
-    //                     }
-
-    //                     if (params.count && count >= params.count) {
-    //                         return resolve(results);
-    //                     }
-    //                     cursor.continue();
-    //                 } else {
-    //                     resolve(results);
-    //                 }
-    //             };
-
-    //             request.onerror = () => reject(request.error);
-    //         });
-    //     });
-    // }
-
     async query<T>(storeName: string, params: QueryParams = {}): Promise<T[]> {
-
         return new Promise<T[]>((resolve, reject) => {
             if (!this.db) {
                 throw new Error("Database not initialized");;
@@ -160,13 +124,13 @@ export class IndexedDBManager<T extends { id: string; }> {
 
 
     // Maintenance Operations
-    async clearStore(storeName: string): Promise<void> {
+    clearStore(storeName: string): Promise<void> {
         return this.transaction(storeName, 'readwrite', (store) =>
             store.clear()
         );
     }
 
-    async close(): Promise<void> {
+    close() {
         this.db?.close();
         this.db = null;
     }

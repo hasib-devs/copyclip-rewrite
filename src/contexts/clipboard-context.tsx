@@ -103,26 +103,29 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         }
     }, []);
 
-    const loadInitialHistories = async () => {
-        try {
-            const initialEntries = await db.query<ClipboardEntry>(STORE_NAME);
-
-            console.log({ initialEntries });
-
-            if (initialEntries) {
-                setHistory(initialEntries);
-            }
-        } catch (err) {
-            console.log(err, "Failed to load entries");
-        }
-    };
 
 
     // Load initial history
     useEffect(() => {
-        (async () => {
-            await loadInitialHistories();
-        })();
+        const loadInitialData = async () => {
+            try {
+                const initialEntries = await db.query<ClipboardEntry>(STORE_NAME, {
+                    indexName: 'timestamp',
+                    direction: 'prev',
+                    count: 100
+                });
+
+                console.log({ initialEntries });
+
+                if (initialEntries) {
+                    setHistory(initialEntries);
+                }
+            } catch (err) {
+                console.log(err, "Failed to load entries");
+            }
+        };
+
+        loadInitialData();
     }, []);
 
     useEffect(() => {

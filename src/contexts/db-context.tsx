@@ -24,17 +24,17 @@ export const DatabaseProvider = ({ children }: { children: ReactElement; }) => {
         };
 
         initDB();
+
+        return () => {
+            db.close();
+        };
     }, []);
 
     const value = { db };
 
 
     if (!isReady) {
-        return (
-            <div>
-                <p>Loading...</p>
-            </div>
-        );
+        return;
     }
 
     return (

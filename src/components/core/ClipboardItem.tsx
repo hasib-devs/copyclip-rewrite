@@ -7,7 +7,7 @@ export const ClipboardItem = ({ entry }: { entry: ClipboardEntry; }) => {
             {/* Content Preview */}
             <div className="flex items-start gap-3">
                 <div className="flex-shrink-0 w-6 h-6 mt-1 text-blue-500">
-                    {entry.type === 'text' ? '📄' : '🌃'}
+                    {entry.type === 'text' ? '📄' : '🏞️'}
                 </div>
 
                 <div className="flex-1 min-w-0">
