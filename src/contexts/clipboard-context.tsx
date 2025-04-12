@@ -2,6 +2,7 @@ import { createContext, FC, ReactElement, useCallback, useEffect, useMemo, useRe
 import { startListening, writeText, writeImageBase64 } from "tauri-plugin-clipboard-api";
 import { ClipboardContextType, ClipboardEntry, ClipboardPayload } from "../types";
 import { setupListeners } from "../utils/core";
+import { STORAGE_KEY } from "../utils/constants";
 
 export const ClipboardContext = createContext<ClipboardContextType | undefined>(undefined);
 
@@ -10,6 +11,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     const [searchQuery, setSearchQuery] = useState('');
     const [history, setHistory] = useState<ClipboardEntry[]>([]);
     const abortControllerRef = useRef<AbortController>();
+    const saveTimeoutRef = useRef<number>();
 
     const stop = useCallback(() => {
         abortControllerRef.current?.abort();
@@ -26,13 +28,6 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
             entry.type === 'text' && entry.content.includes(query)
         );
 
-    const reportError = useCallback((error: Error) => {
-        console.error(error);
-        if (import.meta.env.PROD) {
-            //   sentry.captureException(error);
-        }
-    }, []);
-
     // Filtered history implementation
     const filteredHistory = useMemo(() => {
         return history.filter(entry => {
@@ -43,6 +38,14 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         });
     }, [history, searchQuery]);
 
+    // Save history with debouncing
+    const saveHistory = useCallback((entries: ClipboardEntry[]) => {
+        if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+        saveTimeoutRef.current = setTimeout(() => {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+        }, 300);
+    }, []);
+
     const addEntry = (newEntry: ClipboardPayload) => {
         setHistory(prev => {
             if (prev[0]?.content === newEntry.content) return prev;
@@ -52,8 +55,9 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
                 id: crypto.randomUUID(),
                 timestamp: Date.now()
             };
-
-            return [entry, ...prev];
+            const newHistory = [entry, ...prev];
+            saveHistory(newHistory);
+            return newHistory;
         });
     };
 
@@ -63,14 +67,14 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         localStorage.removeItem(STORAGE_KEY);
     }, []);
 
-    // Delete entry implementation
+    // Delete entry with storage
     const deleteEntry = useCallback((id: string) => {
         setHistory(prev => {
             const newHistory = prev.filter(entry => entry.id !== id);
-            setHistory(newHistory);
+            saveHistory(newHistory);
             return newHistory;
         });
-    }, []);
+    }, [saveHistory]);
 
     // Copy to clipboard implementation
     const copyToClipboard = useCallback(async (content: string, type: 'text' | 'image') => {
@@ -85,10 +89,6 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
                 content,
                 type
             });
-            // setHistory(prev => {
-            //     const newEntry = createEntry(content, type);
-            //     return [newEntry, ...prev];
-            // });
         } catch (error) {
             console.error('Failed to copy to clipboard:', error);
         }
