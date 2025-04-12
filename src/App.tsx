@@ -1,9 +1,10 @@
-import { Theme } from '@radix-ui/themes';
-import '@radix-ui/themes/styles.css';
+import "@radix-ui/themes/styles.css";
+import '@/css/style.css';
+
+import { Box } from "@radix-ui/themes";
 import { invoke } from "@tauri-apps/api/core";
 import { useEffect } from 'react';
-import '@/assets/style.css';
-import { ClipboardView } from '@/components/core/ClipboardView';
+import DefaultLayout from "./features/layouts/Default";
 
 function App() {
 
@@ -14,9 +15,9 @@ function App() {
   }, []);
 
   return (
-    <Theme className="w-screen h-screen bg-gray-100">
-      <ClipboardView />
-    </Theme>
+    <Box>
+      <DefaultLayout />
+    </Box>
   );
 }
 
