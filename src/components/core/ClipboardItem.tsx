@@ -1,6 +1,7 @@
 import { ClipboardEntry } from '../../types';
 
 export const ClipboardItem = ({ entry }: { entry: ClipboardEntry; }) => {
+
     return (
         <div className="group relative bg-white dark:bg-gray-800 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow border border-gray-200 dark:border-gray-700">
             {/* Content Preview */}

@@ -1,15 +1,25 @@
 import { createContext, FC, ReactElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { startListening, writeText, writeImageBase64 } from "tauri-plugin-clipboard-api";
+import { startListening, writeImageBase64, writeText } from "tauri-plugin-clipboard-api";
 import { ClipboardContextType, ClipboardEntry, ClipboardPayload } from "../types";
 import { setupListeners } from "../utils/core";
-import { STORAGE_KEY } from "../utils/constants";
+import { useDatabase } from "../hooks";
+import { STORE_NAME } from "../utils/constants";
 
 export const ClipboardContext = createContext<ClipboardContextType | undefined>(undefined);
 
 export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children }) => {
+    const { db } = useDatabase();
     const [isRunning, setIsRunning] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
-    const [history, setHistory] = useState<ClipboardEntry[]>([]);
+    const [history, setHistory] = useState<ClipboardEntry[]>([
+        {
+            id: "123",
+            type: "text",
+            content: "Hello world",
+            timestamp: 0,
+            contentType: "text/plain"
+        }
+    ]);
     const abortControllerRef = useRef<AbortController>();
     const saveTimeoutRef = useRef<number>();
 
@@ -39,14 +49,14 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     }, [history, searchQuery]);
 
     // Save history with debouncing
-    const saveHistory = useCallback((entries: ClipboardEntry[]) => {
+    const saveHistory = useCallback((entry: ClipboardEntry) => {
         if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
         saveTimeoutRef.current = setTimeout(() => {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+            db.create(STORE_NAME, entry);
         }, 300);
     }, []);
 
-    const addEntry = (newEntry: ClipboardPayload) => {
+    const addHistory = (newEntry: ClipboardPayload) => {
         setHistory(prev => {
             if (prev[0]?.content === newEntry.content) return prev;
 
@@ -56,7 +66,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
                 timestamp: Date.now()
             };
             const newHistory = [entry, ...prev];
-            saveHistory(newHistory);
+            saveHistory(entry);
             return newHistory;
         });
     };
@@ -64,15 +74,13 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     // Clear all history
     const clearHistory = useCallback(() => {
         setHistory([]);
-        localStorage.removeItem(STORAGE_KEY);
+        // localStorage.removeItem(STORAGE_KEY);
     }, []);
 
     // Delete entry with storage
-    const deleteEntry = useCallback((id: string) => {
+    const deleteHistory = useCallback((id: string) => {
         setHistory(prev => {
-            const newHistory = prev.filter(entry => entry.id !== id);
-            saveHistory(newHistory);
-            return newHistory;
+            return prev.filter(entry => entry.id !== id);
         });
     }, [saveHistory]);
 
@@ -85,36 +93,42 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
                 await writeImageBase64(content);
             }
             // Add to history
-            addEntry({
+            addHistory({
                 content,
-                type
+                type,
+                contentType: type === "text" ? "text/plain" : "image/png"
             });
         } catch (error) {
             console.error('Failed to copy to clipboard:', error);
         }
     }, []);
 
+    const loadInitialHistories = async () => {
+        try {
+            const initialEntries = await db.query<ClipboardEntry>(STORE_NAME);
+
+            console.log({ initialEntries });
+
+            if (initialEntries) {
+                setHistory(initialEntries);
+            }
+        } catch (err) {
+            console.log(err, "Failed to load entries");
+        }
+    };
+
+
     // Load initial history
     useEffect(() => {
-        try {
-            const savedHistory = localStorage.getItem(STORAGE_KEY);
-            if (savedHistory) {
-                try {
-                    const parsed = JSON.parse(savedHistory) as ClipboardEntry[];
-                    setHistory(parsed);
-                } catch (error) {
-                    console.log("savedHistory parsed failed: ", error);
-                }
-            }
-        } catch (error) {
-            console.error("Failed to load clipboard history:", error);
-        }
+        (async () => {
+            await loadInitialHistories();
+        })();
     }, []);
 
     useEffect(() => {
         setupListeners({
             abortControllerRef,
-            addEntry,
+            addEntry: addHistory,
             setIsRunning,
         });
 
@@ -125,7 +139,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
 
     const value: ClipboardContextType = {
         filteredHistory,
-        addEntry,
+        addEntry: addHistory,
         start,
         stop,
         isRunning,
@@ -134,7 +148,9 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         setSearchQuery,
         copyToClipboard,
         clearHistory,
-        deleteEntry,
+        deleteEntry: deleteHistory,
+        history,
+        setHistory,
     };
 
     return (
