@@ -36,9 +36,32 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         setHistory(prev => {
             if (prev[0]?.content === newEntry.content) return prev;
 
-            return [{ ...newEntry, id: crypto.randomUUID() }, ...prev];
+            const entry = {
+                ...newEntry,
+                id: crypto.randomUUID(),
+                timestamp: Date.now()
+            };
+
+            return [entry, ...prev];
         });
     };
+
+    // Load initial history
+    useEffect(() => {
+        try {
+            const savedHistory = localStorage.getItem(STORAGE_KEY);
+            if (savedHistory) {
+                try {
+                    const parsed = JSON.parse(savedHistory) as ClipboardEntry[];
+                    setHistory(parsed);
+                } catch (error) {
+                    console.log("savedHistory parsed failed: ", error);
+                }
+            }
+        } catch (error) {
+            console.error("Failed to load clipboard history:", error);
+        }
+    }, []);
 
     useEffect(() => {
         setupListeners({

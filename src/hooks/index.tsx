@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { ClipboardContext } from "../contexts/clipboard-context";
 
-export function useClipboardContext() {
+export function useClipboard() {
     const context = useContext(ClipboardContext);
 
     if (context === undefined) {

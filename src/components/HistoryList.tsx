@@ -1,10 +1,10 @@
 import { Heading } from "@radix-ui/themes";
 import React from "react";
 import { ClipboardItem } from "./ClipboardItem";
-import { useClipboardContext } from "../hooks";
+import { useClipboard } from "../hooks";
 
 export const HistoryList: React.FC = () => {
-  const { history } = useClipboardContext();
+  const { history } = useClipboard();
   return (
     <div className="p-4">
       <Heading>📋 Clipboard History</Heading>

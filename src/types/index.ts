@@ -4,6 +4,7 @@ export type ClipboardEntry = {
     type: "text" | "image";
     content: string;
     pinned?: boolean;
+    timestamp: number;
 };
 
 export type ClipboardContextType = {
