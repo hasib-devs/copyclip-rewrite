@@ -7,8 +7,6 @@
   ],
   "permissions": [
     "core:default",
-    "opener:default",
-    "clipboard:read-all",
-    "clipboard:monitor-all"
+    "opener:default"
   ]
 }

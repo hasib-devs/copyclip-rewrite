@@ -8,6 +8,10 @@ use tauri_plugin_positioner::{Position, WindowExt};
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_sql::Builder::new().build())
+        .plugin(tauri_plugin_positioner::init())
+        .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_clipboard::init())
+        .invoke_handler(tauri::generate_handler![greet])
         .setup(|app| {
             let win = app.get_webview_window("main").unwrap();
 
@@ -15,10 +19,6 @@ pub fn run() {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet])
-        .plugin(tauri_plugin_positioner::init())
-        .plugin(tauri_plugin_opener::init())
-        .plugin(tauri_plugin_clipboard::init())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

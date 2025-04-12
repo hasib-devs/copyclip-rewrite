@@ -1,5 +1,5 @@
 import "@radix-ui/themes/styles.css";
-import '@/css/style.css';
+import '@/assets/css/style.css';
 
 import { Box } from "@radix-ui/themes";
 import { invoke } from "@tauri-apps/api/core";

@@ -1,10 +1,15 @@
-import { Heading } from "@radix-ui/themes";
+import { Box, Heading, Section } from "@radix-ui/themes";
+import ClipboardEntry from "./ClipboardEntry";
 
 const ClipboardList = () => {
     return (
-        <div>
-            <Heading size="4">Clipboard History</Heading>
-        </div>
+        <Box>
+            <Heading size="4">Clipboard List</Heading>
+
+            <Section py="2">
+                <ClipboardEntry />
+            </Section>
+        </Box>
     );
 };
 
