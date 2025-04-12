@@ -1,41 +1,12 @@
-import { createContext, ReactElement, useEffect, useState } from "react";
-import { IndexedDBManager } from "../lib/IndexedDBManager";
-import { ClipboardEntry } from "../types";
-import { clipboardDBConfig } from "../lib/db-config";
+import { createContext, ReactElement, useState } from "react";
 
 export type DatabaseContextType = {
-    db: IndexedDBManager<ClipboardEntry>;
 };
 
 export const DatabaseContext = createContext<DatabaseContextType | undefined>(undefined);
 
 export const DatabaseProvider = ({ children }: { children: ReactElement; }) => {
-    const [db] = useState(new IndexedDBManager<ClipboardEntry>(clipboardDBConfig));
-    const [isReady, setIsReady] = useState(false);
-
-    useEffect(() => {
-        const initDB = async () => {
-            try {
-                await db.initialize();
-                setIsReady(true);
-            } catch (err) {
-                console.error("DB initialization error:", err);
-            }
-        };
-
-        initDB();
-
-        return () => {
-            db.close();
-        };
-    }, []);
-
-    const value = { db };
-
-
-    if (!isReady) {
-        return;
-    }
+    const value = {};
 
     return (
         <DatabaseContext.Provider value={value}>{children}</DatabaseContext.Provider>

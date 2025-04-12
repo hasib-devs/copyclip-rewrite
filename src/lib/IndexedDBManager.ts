@@ -1,4 +1,21 @@
 import { DBOptions, QueryParams } from "../types";
+import { DB_NAME, STORE_NAME } from "../utils/constants";
+
+export const indexedDBConfig: DBOptions = {
+    name: DB_NAME,
+    version: 5,
+    objectStores: [
+        {
+            name: STORE_NAME,
+            keyPath: 'id',
+            indexes: [
+                { name: 'timestamp', keyPath: 'timestamp' },
+                { name: 'type', keyPath: 'type' },
+                { name: 'contentType', keyPath: 'contentType' }
+            ]
+        }
+    ]
+};
 
 export class IndexedDBManager<T extends { id: string; }> {
     private db: IDBDatabase | null = null;

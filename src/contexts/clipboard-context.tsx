@@ -2,13 +2,10 @@ import { createContext, FC, ReactElement, useCallback, useEffect, useMemo, useRe
 import { startListening, writeImageBase64, writeText } from "tauri-plugin-clipboard-api";
 import { ClipboardContextType, ClipboardEntry, ClipboardPayload } from "../types";
 import { setupListeners } from "../utils/core";
-import { useDatabase } from "../hooks";
-import { STORE_NAME } from "../utils/constants";
 
 export const ClipboardContext = createContext<ClipboardContextType | undefined>(undefined);
 
 export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children }) => {
-    const { db } = useDatabase();
     const [isRunning, setIsRunning] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [history, setHistory] = useState<ClipboardEntry[]>([
@@ -52,7 +49,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     const saveHistory = useCallback((entry: ClipboardEntry) => {
         if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
         saveTimeoutRef.current = setTimeout(() => {
-            db.create(STORE_NAME, entry);
+            // db.create(STORE_NAME, entry);
         }, 300);
     }, []);
 
@@ -109,17 +106,17 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     useEffect(() => {
         const loadInitialData = async () => {
             try {
-                const initialEntries = await db.query<ClipboardEntry>(STORE_NAME, {
-                    indexName: 'timestamp',
-                    direction: 'prev',
-                    count: 100
-                });
+                // const initialEntries = await db.query<ClipboardEntry>(STORE_NAME, {
+                //     indexName: 'timestamp',
+                //     direction: 'prev',
+                //     count: 100
+                // });
 
-                console.log({ initialEntries });
+                // console.log({ initialEntries });
 
-                if (initialEntries) {
-                    setHistory(initialEntries);
-                }
+                // if (initialEntries) {
+                //     setHistory(initialEntries);
+                // }
             } catch (err) {
                 console.log(err, "Failed to load entries");
             }
