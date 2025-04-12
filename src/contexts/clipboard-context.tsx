@@ -1,6 +1,6 @@
 import { createContext, FC, ReactElement, useCallback, useEffect, useRef, useState } from "react";
 import { startListening } from "tauri-plugin-clipboard-api";
-import { ClipboardContextType, ClipboardEntry } from "../types";
+import { ClipboardContextType, ClipboardEntry, ClipboardPayload } from "../types";
 import { setupListeners } from "../utils/core";
 
 export const ClipboardContext = createContext<ClipboardContextType | undefined>(undefined);
@@ -20,10 +20,30 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         return startListening();
     }, [stop]);
 
+    const searchClipboard = (query: string) =>
+        history.filter(entry =>
+            entry.type === 'text' && entry.content.includes(query)
+        );
+
+    const reportError = useCallback((error: Error) => {
+        console.error(error);
+        if (import.meta.env.PROD) {
+            //   sentry.captureException(error);
+        }
+    }, []);
+
+    const addEntry = (newEntry: ClipboardPayload) => {
+        setHistory(prev => {
+            if (prev[0]?.content === newEntry.content) return prev;
+
+            return [{ ...newEntry, id: crypto.randomUUID() }, ...prev];
+        });
+    };
+
     useEffect(() => {
         setupListeners({
             abortControllerRef,
-            setHistory,
+            addEntry,
             setIsRunning,
         });
 
@@ -34,10 +54,11 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
 
     const value: ClipboardContextType = {
         history,
-        setHistory,
+        addEntry,
         start,
         stop,
-        isRunning
+        isRunning,
+        searchClipboard
     };
 
     return (

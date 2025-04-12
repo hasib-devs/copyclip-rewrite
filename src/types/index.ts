@@ -1,4 +1,3 @@
-import { Dispatch } from "react";
 
 export type ClipboardEntry = {
     id: string;
@@ -9,10 +8,11 @@ export type ClipboardEntry = {
 
 export type ClipboardContextType = {
     history: ClipboardEntry[],
-    setHistory: Dispatch<React.SetStateAction<ClipboardEntry[]>>;
+    addEntry: (newEntry: ClipboardEntry) => void;
     start(): Promise<() => Promise<void>>;
     stop(): void;
     isRunning: boolean;
+    searchClipboard: (query: string) => ClipboardEntry[];
 };
 
 export type ClipboardPayload = Omit<ClipboardEntry, "id">;

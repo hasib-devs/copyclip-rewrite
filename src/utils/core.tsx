@@ -1,14 +1,14 @@
 import { Dispatch, MutableRefObject, SetStateAction } from "react";
 import { listenToMonitorStatusUpdate, onImageUpdate, onTextUpdate, startListening } from "tauri-plugin-clipboard-api";
-import { ClipboardEntry } from "../types";
+import { ClipboardPayload } from "../types";
 
 export type SetupListenersProps = {
     abortControllerRef: MutableRefObject<AbortController | undefined>;
-    setHistory: Dispatch<React.SetStateAction<ClipboardEntry[]>>;
+    addEntry: (newEntry: ClipboardPayload) => void;
     setIsRunning: Dispatch<SetStateAction<boolean>>;
 };
 
-export async function setupListeners({ abortControllerRef: abortRef, setIsRunning, setHistory }: SetupListenersProps) {
+export async function setupListeners({ abortControllerRef: abortRef, setIsRunning, addEntry }: SetupListenersProps) {
     try {
         const controller = new AbortController();
         abortRef.current = controller;
@@ -29,25 +29,20 @@ export async function setupListeners({ abortControllerRef: abortRef, setIsRunnin
             // Order 2
             onTextUpdate((newText) => {
                 if (signal.aborted) return;
-                setHistory(prev => {
-                    // Deduplication check
-                    if (prev[0]?.content === newText) return prev;
-                    return [{
-                        id: crypto.randomUUID(),
-                        type: "text",
-                        content: newText
-                    }, ...prev];
+                addEntry({
+                    type: "text",
+                    content: newText
                 });
             }),
 
             // Order 3
             onImageUpdate((b64Str) => {
                 if (signal.aborted) return;
-                setHistory(prev => [{
-                    id: crypto.randomUUID(),
+
+                addEntry({
                     type: "image",
                     content: b64Str
-                }, ...prev]);
+                });
             })
         ]);
 
