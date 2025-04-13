@@ -18,18 +18,16 @@ pub fn run() {
             insert_clipboard_entry
         ])
         .setup(|app| {
-            let handle = app.handle();
+            let app_handle = app.handle();
             let win = app.get_webview_window("main").unwrap();
 
             // Window position setup
             let _ = win.as_ref().window().move_window(Position::RightCenter);
 
             // Start Clipboard Monitor
-            let monitor = clips_service::Monitor::new(handle);
-            monitor.print_status();
-            monitor.start();
-            monitor.print_status();
-
+            let monitor = clips_service::Monitor::new(app_handle);
+            monitor.start_monitor();
+            monitor.listen_for_changes();
             Ok(())
         })
         .run(tauri::generate_context!())

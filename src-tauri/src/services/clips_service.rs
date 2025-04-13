@@ -15,24 +15,33 @@ impl<'a, R: Runtime> Monitor<'a, R> {
         }
     }
 
-    pub fn start(&self) {
+    pub fn start_monitor(&self) {
         self.clipboard
             .start_monitor(self.app_handle.clone())
             .unwrap();
     }
 
-    pub fn stop(&self) {
+    pub fn stop_monitor(&self) {
         self.clipboard
             .stop_monitor(self.app_handle.clone())
             .unwrap();
     }
 
-    pub fn status(&self) -> bool {
+    pub fn is_monitor_running(&self) -> bool {
         self.clipboard.is_monitor_running()
     }
 
     pub fn print_status(&self) {
-        let status = if self.status() { "On" } else { "Off" };
-        println!("Clipboard status: {}", status);
+        let status = if self.is_monitor_running() {
+            "On"
+        } else {
+            "Off"
+        };
+        println!("Monitoring status: {}", status);
+    }
+
+    pub fn listen_for_changes(&self) {
+        let text = self.clipboard.read_text().unwrap();
+        println!("Value is: {}", text);
     }
 }

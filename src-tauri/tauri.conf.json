@@ -16,7 +16,8 @@
         "resizable": false,
         "title": "Copyclip",
         "width": 400,
-        "height": 620
+        "height": 620,
+        "decorations": false
       }
     ],
     "security": {

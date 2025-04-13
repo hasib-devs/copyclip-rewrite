@@ -4,7 +4,7 @@ import ClipboardList from "@/features/clipboard/ClipboardList";
 const DefaultLayout = () => {
     return (
         <Tabs.Root defaultValue="Clipboard">
-            <Tabs.List justify="center" color="gray" highContrast>
+            <Tabs.List className="header-tab-list" data-tauri-drag-region justify="center" color="gray" highContrast>
                 <Tabs.Trigger title="Clipboard List" value="Clipboard">📋</Tabs.Trigger>
                 <Tabs.Trigger title="Emoji" value="Emoji">🫥</Tabs.Trigger>
                 <Tabs.Trigger title="Todo" value="Todo">📒</Tabs.Trigger>
