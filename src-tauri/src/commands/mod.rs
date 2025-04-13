@@ -1,6 +1,10 @@
-pub mod clipboard;
+mod clipboard;
+
+#[allow(unused_imports)]
+pub use clipboard::*;
 
 #[tauri::command]
-pub(crate) fn greet() -> String {
+#[allow(dead_code)]
+pub fn greet() -> String {
     format!("Welcome to Copyclip")
 }
