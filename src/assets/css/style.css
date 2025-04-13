@@ -1,14 +1,58 @@
-@import "./reset.css";
-
-/* Header */
-.header-tab-list {
-    background-color: var(--accent-5);
-}
+@import "tailwindcss";
 
 .radix-themes {
-    background-color: rgb(248, 248, 248);
+    background-color: rgb(250 250 250);
+    border-color: rgb(228 228 231);
 }
 
-.radix-themes:is(.dark, .dark-theme) {
-    background-color: rgb(40, 44, 52);
+.header-tab-list .rt-BaseTabListTriggerInner.rt-TabsTriggerInner {
+    width: 70px;
+    padding: 3px 0px;
 }
+
+.header-tab-list .rt-BaseTabListTrigger {
+    padding: 5px 0px;
+    width: 70px;
+}
+
+.header-tab-list .rt-BaseTabListTrigger.rt-TabsTrigger {
+    padding: 28px 0px;
+}
+
+
+/* @import "./reset.css";
+
+.header-tab-list {
+    background-color: #ffffff;
+    gap: 20px;
+
+}
+
+
+.radix-themes:is(.dark, .dark-theme) {
+}
+
+.header-tab-list .rt-BaseTabListTrigger:where([data-state='active']) :where(.rt-BaseTabListTriggerInner) {
+}
+
+.header-tab-list .rt-BaseTabListTriggerInner {
+    padding: 0;
+}
+
+
+
+.header-tab-list .rt-BaseTabListTrigger:where([data-state='active']) {}
+
+
+
+.bg-zinc-50 {
+    background-color: rgb(250 250 250);
+}
+
+.border-zinc-200 {
+    border-color: rgb(228 228 231);
+}
+
+.text-muted-foreground {
+    color: #71717a;
+} */

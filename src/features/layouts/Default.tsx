@@ -1,19 +1,47 @@
-import ClipboardList from "@/features/clipboard/ClipboardList";
-import { Box, Tabs, Text } from "@radix-ui/themes";
+
+import ClipsList from "@/features/clipboard/ClipsList";
+import { Box, Flex, Tabs, Text } from "@radix-ui/themes";
+import {
+    Clipboard,
+    ListTodo,
+    Settings,
+    Smile
+} from "lucide-react";
 
 const DefaultLayout = () => {
     return (
         <Tabs.Root defaultValue="Clipboard">
-            <Tabs.List className="header-tab-list" data-tauri-drag-region justify="center" color="gray" highContrast>
-                <Tabs.Trigger title="Clipboard List" value="Clipboard">📋</Tabs.Trigger>
-                <Tabs.Trigger title="Emoji" value="Emoji">🎃</Tabs.Trigger>
-                <Tabs.Trigger title="Todo" value="Todo">📝</Tabs.Trigger>
-                <Tabs.Trigger title="Settings" value="Settings">⚙️</Tabs.Trigger>
+            <Tabs.List className="header-tab-list h-18 bg-white" data-tauri-drag-region justify="center" color="gray" highContrast>
+                <Tabs.Trigger title="Clipboard" value="Clipboard">
+                    <Flex direction="column" justify="center" align="center">
+                        <Clipboard />
+                        <Text size="1">Clipboard</Text>
+                    </Flex>
+                </Tabs.Trigger>
+                <Tabs.Trigger title="Emoji" value="Emoji">
+                    <Flex direction="column" justify="center" align="center">
+                        <Smile />
+                        <Text size="1">Emoji</Text>
+                    </Flex>
+                </Tabs.Trigger>
+                <Tabs.Trigger title="Todo" value="Todo">
+                    <Flex direction="column" justify="center" align="center">
+                        <ListTodo />
+                        <Text size="1">Todo</Text>
+                    </Flex>
+                </Tabs.Trigger>
+                <Tabs.Trigger title="Settings" value="Settings">
+                    <Flex direction="column" justify="center" align="center">
+                        <Settings />
+                        <Text size="1">Settings</Text>
+                    </Flex>
+                </Tabs.Trigger>
+
             </Tabs.List>
 
-            <Box p="4">
+            <Box className="bg-white mt-2 h-dvh">
                 <Tabs.Content value="Clipboard">
-                    <ClipboardList />
+                    <ClipsList />
                 </Tabs.Content>
 
                 <Tabs.Content value="Emoji">
