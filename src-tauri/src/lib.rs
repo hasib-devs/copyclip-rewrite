@@ -1,7 +1,8 @@
 mod commands;
 mod services;
 
-use commands::*;
+use commands::{get_clipboard_entries, greet, insert_clipboard_entry};
+use services::clips_service;
 use tauri::Manager;
 use tauri_plugin_positioner::{Position, WindowExt};
 
@@ -24,15 +25,10 @@ pub fn run() {
             let _ = win.as_ref().window().move_window(Position::RightCenter);
 
             // Start Clipboard Monitor
-            let clipboard = handle.state::<tauri_plugin_clipboard::Clipboard>();
-            let _ = clipboard.start_monitor(handle.clone());
-
-            let is_running = clipboard.is_monitor_running();
-            let status = match is_running {
-                true => "On",
-                false => "Off",
-            };
-            println!("Clipboard monitor status: {}", status);
+            let monitor = clips_service::Monitor::new(handle);
+            monitor.print_status();
+            monitor.start();
+            monitor.print_status();
 
             Ok(())
         })

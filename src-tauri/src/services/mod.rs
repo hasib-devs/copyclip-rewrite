@@ -1,1 +1,1 @@
-mod clipboard_monitor;
+pub mod clips_service;
