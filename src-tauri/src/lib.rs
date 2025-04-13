@@ -2,8 +2,8 @@ mod commands;
 mod services;
 
 use commands::{get_clipboard_entries, greet, insert_clipboard_entry};
-use services::clips_service;
-use tauri::Manager;
+use tauri::{Listener, Manager};
+use tauri_plugin_clipboard::Clipboard;
 use tauri_plugin_positioner::{Position, WindowExt};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -24,10 +24,20 @@ pub fn run() {
             // Window position setup
             let _ = win.as_ref().window().move_window(Position::RightCenter);
 
-            // Start Clipboard Monitor
-            let monitor = clips_service::Monitor::new(app_handle);
-            monitor.start_monitor();
-            monitor.listen_for_changes();
+            // Clipboard Monitor
+            let clipboard = app_handle.state::<Clipboard>();
+            let _ = clipboard.start_monitor(app_handle.clone());
+
+            if clipboard.is_monitor_running() {
+                println!("✅ Clipboard monitor is online.");
+            } else {
+                println!("❌ Clipboard monitor is offline.");
+            }
+
+            app.listen("plugin:clipboard://clipboard-monitor/update", |e| {
+                println!("🔖 {}", e.payload());
+            });
+
             Ok(())
         })
         .run(tauri::generate_context!())
