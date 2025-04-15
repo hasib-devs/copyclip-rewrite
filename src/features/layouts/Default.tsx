@@ -4,56 +4,67 @@ import { Box, Flex, Tabs, Text } from "@radix-ui/themes";
 import {
     Clipboard,
     ListTodo,
-    Settings,
+    Settings as SettingsIcon,
     Smile
 } from "lucide-react";
+import EmojiList from "../emoji/EmojiList";
+import TodoList from "../todo/TodoList";
+import Settings from "../settings/Settings";
 
 const DefaultLayout = () => {
     return (
         <Tabs.Root defaultValue="Clipboard">
-            <Tabs.List className="header-tab-list h-18 bg-white" data-tauri-drag-region justify="center" color="gray" highContrast>
+            <Tabs.List className="header-tab-list bg-white" data-tauri-drag-region justify="center" color="gray" highContrast>
                 <Tabs.Trigger title="Clipboard" value="Clipboard">
                     <Flex direction="column" justify="center" align="center">
-                        <Clipboard />
+                        <div className="icon w-10 flex justify-center items-center rounded-full">
+                            <Clipboard />
+                        </div>
                         <Text size="1">Clipboard</Text>
                     </Flex>
                 </Tabs.Trigger>
                 <Tabs.Trigger title="Emoji" value="Emoji">
                     <Flex direction="column" justify="center" align="center">
-                        <Smile />
+                        <div className="icon w-10 flex justify-center items-center rounded-full">
+                            <Smile />
+                        </div>
                         <Text size="1">Emoji</Text>
                     </Flex>
                 </Tabs.Trigger>
                 <Tabs.Trigger title="Todo" value="Todo">
                     <Flex direction="column" justify="center" align="center">
-                        <ListTodo />
+                        <div className="icon w-10 flex justify-center items-center rounded-full">
+                            <ListTodo />
+                        </div>
                         <Text size="1">Todo</Text>
                     </Flex>
                 </Tabs.Trigger>
                 <Tabs.Trigger title="Settings" value="Settings">
                     <Flex direction="column" justify="center" align="center">
-                        <Settings />
+                        <div className="icon w-10 flex justify-center items-center rounded-full">
+                            <SettingsIcon />
+                        </div>
                         <Text size="1">Settings</Text>
                     </Flex>
                 </Tabs.Trigger>
 
             </Tabs.List>
 
-            <Box className="bg-white mt-2 h-dvh">
+            <Box className="mt-2 h-dvh bg-transparent">
                 <Tabs.Content value="Clipboard">
                     <ClipsList />
                 </Tabs.Content>
 
                 <Tabs.Content value="Emoji">
-                    <Text size="2">Emoji List</Text>
+                    <EmojiList />
                 </Tabs.Content>
 
                 <Tabs.Content value="Todo">
-                    <Text size="2">Todo List</Text>
+                    <TodoList />
                 </Tabs.Content>
 
                 <Tabs.Content value="Settings">
-                    <Text size="2">Settings</Text>
+                    <Settings />
                 </Tabs.Content>
             </Box>
         </Tabs.Root>

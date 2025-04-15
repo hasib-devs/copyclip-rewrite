@@ -1,20 +1,15 @@
-import { Badge, Box, Button, ScrollArea, TextField } from "@radix-ui/themes";
+import { Button, DropdownMenu, ScrollArea, TextField } from "@radix-ui/themes";
 import ClipItem from "./ClipItem";
 import { useClipboard } from "./clipboard-context";
 
-import { cn } from "@/lib/utils";
 import {
     Clipboard,
     Filter,
-    Search,
-    X
+    Search
 } from "lucide-react";
-import { useState } from "react";
 
 const ClipsList = () => {
-    const { filteredClips, searchQuery } = useClipboard();
-
-    const [showCategoryFilter, setShowCategoryFilter] = useState(false);
+    const { filteredClips } = useClipboard();
 
     return (
         <div>
@@ -22,40 +17,51 @@ const ClipsList = () => {
                 <h1 className="text-xl font-semibold text-zinc-800">Clipboard History</h1>
                 <div className="flex items-center gap-2 mt-2">
                     <div className="relative flex-1">
-                        <TextField.Root placeholder="Search…">
+                        <TextField.Root placeholder="Search…" className="focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" >
                             <TextField.Slot>
                                 <Search className="text-zinc-400" height="16" width="16" />
                             </TextField.Slot>
                         </TextField.Root>
 
                     </div>
-                    <Button
-                        variant="outline"
-                        onClick={() => setShowCategoryFilter(!showCategoryFilter)}
-                        className={cn(showCategoryFilter && "bg-zinc-100")}
-                    >
-                        <Filter className="h-4 w-4" />
-                    </Button>
-                </div>
 
-                {showCategoryFilter && (
-                    <div className="flex flex-wrap gap-1 mt-2">
-                        {[].map((category) => (
-                            <Badge
-                                key={category}
-                                // variant={activeCategories.includes(category) ? "default" : "outline"}
-                                className="cursor-pointer"
+                    <DropdownMenu.Root>
+                        <DropdownMenu.Trigger>
+                            <Button
+                                variant="outline"
+                                style={{ paddingLeft: "var(--space-2)", paddingRight: "var(--space-2)" }}
+                                color="gray"
                             >
-                                {category}
-                            </Badge>
-                        ))}
-                        {([].length > 0 || searchQuery) && (
-                            <Badge className="cursor-pointer ml-auto" >
-                                Clear filters <X className="ml-1 h-3 w-3" />
-                            </Badge>
-                        )}
-                    </div>
-                )}
+                                <Filter className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenu.Trigger>
+                        <DropdownMenu.Content>
+                            <DropdownMenu.Item shortcut="⌘ E">Edit</DropdownMenu.Item>
+                            <DropdownMenu.Item shortcut="⌘ D">Duplicate</DropdownMenu.Item>
+                            <DropdownMenu.Separator />
+                            <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
+
+                            <DropdownMenu.Sub>
+                                <DropdownMenu.SubTrigger>More</DropdownMenu.SubTrigger>
+                                <DropdownMenu.SubContent>
+                                    <DropdownMenu.Item>Move to project…</DropdownMenu.Item>
+                                    <DropdownMenu.Item>Move to folder…</DropdownMenu.Item>
+
+                                    <DropdownMenu.Separator />
+                                    <DropdownMenu.Item>Advanced options…</DropdownMenu.Item>
+                                </DropdownMenu.SubContent>
+                            </DropdownMenu.Sub>
+
+                            <DropdownMenu.Separator />
+                            <DropdownMenu.Item>Share</DropdownMenu.Item>
+                            <DropdownMenu.Item>Add to favorites</DropdownMenu.Item>
+                            <DropdownMenu.Separator />
+                            <DropdownMenu.Item shortcut="⌘ ⌫" color="red">
+                                Delete
+                            </DropdownMenu.Item>
+                        </DropdownMenu.Content>
+                    </DropdownMenu.Root>
+                </div>
             </div>
 
             <ScrollArea className="flex-1">
@@ -63,20 +69,13 @@ const ClipsList = () => {
                     {filteredClips.length > 0 ? (
                         filteredClips.map(clip => <ClipItem clip={clip} key={clip.id} />)
                     ) : (
-                        <div className="text-center flex justify-center flex-col py-8 text-zinc-400">
+                        <div className="text-center bg-white rounded-md flex justify-center items-center gap-2 flex-col py-8 text-zinc-400">
                             <Clipboard />
                             <p>No clipboard items found</p>
                         </div>
                     )}
                 </div>
             </ScrollArea>
-
-            <div>
-                {
-
-                }
-
-            </div>
         </div>
     );
 };

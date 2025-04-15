@@ -4,7 +4,7 @@ export type ClipType = {
     id: string;
     type: "text" | "image";
     content: string;
-    pinned?: boolean;
+    isPinned?: boolean;
     timestamp: number;
 };
 
