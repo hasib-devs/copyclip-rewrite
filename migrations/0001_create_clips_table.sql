@@ -1,0 +1,2 @@
+-- UP
+CREATE TABLE clips (id INTEGER PRIMARY KEY, content TEXT);

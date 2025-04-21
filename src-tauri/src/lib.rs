@@ -5,10 +5,26 @@ use commands::{get_clipboard_entries, greet, insert_clipboard_entry};
 use tauri::{Listener, Manager};
 use tauri_plugin_clipboard::Clipboard;
 use tauri_plugin_positioner::{Position, WindowExt};
+use tauri_plugin_sql::{Migration, MigrationKind};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    let migrations = vec![
+        // Define your migrations here
+        // Migration {
+        //     version: 1,
+        //     description: "create_initial_tables",
+        //     sql: "CREATE TABLE clips (id INTEGER PRIMARY KEY);",
+        //     kind: MigrationKind::Up,
+        // },
+    ];
+
     tauri::Builder::default()
+        .plugin(
+            tauri_plugin_sql::Builder::default()
+                .add_migrations("sqlite:copyclip.db", migrations)
+                .build(),
+        )
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_positioner::init())
         .plugin(tauri_plugin_clipboard::init())

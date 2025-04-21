@@ -10,6 +10,8 @@
     "core:window:default", 
     "core:window:allow-start-dragging",
     "opener:default",
+    "sql:default",
+    "sql:allow-execute",
     "clipboard:read-all",
     "clipboard:write-all",
     "clipboard:monitor-all"

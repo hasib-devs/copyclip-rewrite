@@ -59,7 +59,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     }, [clips, searchQuery]);
 
     // Save history with debouncing
-    const saveHistory = useCallback((entry: ClipType) => {
+    const saveClip = useCallback((entry: ClipType) => {
         // db.create(STORE_NAME, entry);
     }, []);
 
@@ -73,7 +73,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
                 timestamp: Date.now()
             };
             const newHistory = [entry, ...prev];
-            saveHistory(entry);
+            saveClip(entry);
             return newHistory;
         });
     };
@@ -89,7 +89,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         setClips(prev => {
             return prev.filter(entry => entry.id !== id);
         });
-    }, [saveHistory]);
+    }, [saveClip]);
 
     // Copy to clipboard implementation
     const copyToClipboard = useCallback(async (content: string, type: 'text' | 'image') => {
