@@ -1,5 +1,5 @@
-import { dummyClips } from "@/assets/data/dummy-clips";
 import { useClipboardListener } from "@/hooks/useClipboardListener";
+import { useDatabase } from "@/hooks/useDatabase";
 import { ClipboardContextType, ClipCreateType, ClipType } from "@/types/clipboard";
 import {
     createContext,
@@ -17,25 +17,39 @@ export const ClipboardContext = createContext<ClipboardContextType | undefined>(
 
 export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children }) => {
     const [searchQuery, setSearchQuery] = useState("");
-    const [clips, setClips] = useState<ClipType[]>(dummyClips);
+    const [clips, setClips] = useState<ClipType[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    // Add new clipboard entry
-    const addClip = useCallback((newEntry: ClipCreateType) => {
-        setClips((prev) => {
-            if (prev[0]?.content === newEntry.content) return prev;
+    const { getClips, createClip, isDbReady } = useDatabase();
+
+    // Add a new clip
+    const addClip = useCallback(
+        async (newEntry: ClipCreateType) => {
+            const exists = clips[0]?.content === newEntry.content;
+            if (exists) return;
+
             const entry: ClipType = {
                 ...newEntry,
                 id: crypto.randomUUID(),
                 createdAt: Date.now(),
+                isPinned: false,
             };
-            return [entry, ...prev];
-        });
-    }, []);
 
-    // Save to DB (mocked)
-    const saveClip = useCallback((entry: ClipType) => {
-        console.log("Implement DB save logic here", entry);
-        // db.create(STORE_NAME, entry);
+            setClips((prev) => [entry, ...prev]);
+
+            await saveClip(entry); // Save to DB
+        },
+        [clips, createClip]
+    );
+
+    // Save to DB
+    const saveClip = useCallback(async (entry: ClipType) => {
+        try {
+            await createClip(entry);
+            console.log("Saved");
+        } catch (error) {
+            console.error('Failed to save clip to database:', error);
+        }
     }, []);
 
     // Save to DB when clip is added
@@ -94,6 +108,26 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         return () => stopListening();
     }, []);
 
+    // Load clips from the database on mount
+    useEffect(() => {
+        if (!isDbReady) return;
+
+        const loadClips = async () => {
+            setIsLoading(true);
+            try {
+                const storedClips = await getClips();
+                console.log({ storedClips });
+                setClips(storedClips);
+            } catch (error) {
+                console.error('Failed to load clips from database:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        loadClips();
+    }, [isDbReady]);
+
     const value: ClipboardContextType = {
         filteredClips,
         addClip,
@@ -104,6 +138,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         deleteClip,
         clips,
         setClips,
+        isLoading,
         //   isListening,
         //   setIsListening,
     };

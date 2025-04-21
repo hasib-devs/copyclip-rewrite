@@ -21,5 +21,6 @@ export type ClipboardContextType = {
     copyToClipboard: (content: string, type: "text" | "image") => Promise<void>;
     clear: () => void;
     deleteClip: (id: string) => void;
+    isLoading: boolean;
 };
 

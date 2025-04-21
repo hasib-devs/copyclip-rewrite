@@ -11,12 +11,12 @@ use tauri_plugin_sql::{Migration, MigrationKind};
 pub fn run() {
     let migrations = vec![
         // Define your migrations here
-        // Migration {
-        //     version: 1,
-        //     description: "create_initial_tables",
-        //     sql: "CREATE TABLE clips (id INTEGER PRIMARY KEY);",
-        //     kind: MigrationKind::Up,
-        // },
+        Migration {
+            version: 1,
+            description: "Create clips table",
+            sql: include_str!("../database/migrations/001_create_clips_table.sql"),
+            kind: MigrationKind::Up,
+        },
     ];
 
     tauri::Builder::default()

@@ -1,12 +1,14 @@
-import "@radix-ui/themes/styles.css";
 import '@/assets/css/style.css';
+import "@radix-ui/themes/styles.css";
 
-import { Box } from "@radix-ui/themes";
+import DefaultLayout from "@/components/layouts/Default";
+import { ClipboardProvider } from "@/contexts/clipboard-context";
+import { Box, Theme } from "@radix-ui/themes";
 import { invoke } from "@tauri-apps/api/core";
 import { useEffect } from 'react';
-import DefaultLayout from "@/components/layouts/Default";
 
 function App() {
+
   useEffect(() => {
     (async () => {
       console.log(await invoke('greet'));
@@ -14,9 +16,13 @@ function App() {
   }, []);
 
   return (
-    <Box>
-      <DefaultLayout />
-    </Box>
+    <ClipboardProvider>
+      <Theme accentColor="teal">
+        <Box>
+          <DefaultLayout />
+        </Box>
+      </Theme>
+    </ClipboardProvider>
   );
 }
 
