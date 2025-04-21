@@ -6,7 +6,7 @@ import { Badge, Button, DropdownMenu } from "@radix-ui/themes";
 type Props = {
     clip: ClipType;
 };
-const ClipItem = ({ clip }: Props) => {
+const ClipboardItem = ({ clip }: Props) => {
     return (
         <div
             className={cn(
@@ -60,4 +60,4 @@ const ClipItem = ({ clip }: Props) => {
     );
 };
 
-export default ClipItem;
+export default ClipboardItem;

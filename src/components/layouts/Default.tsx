@@ -1,5 +1,5 @@
 
-import ClipsList from "@/features/clipboard/ClipsList";
+import ClipboardList from "@/components/clipboard/ClipboardList";
 import { Box, Flex, Tabs, Text } from "@radix-ui/themes";
 import {
     Clipboard,
@@ -7,7 +7,7 @@ import {
     Settings as SettingsIcon,
     Smile
 } from "lucide-react";
-import EmojiList from "../emoji/EmojiList";
+import EmojiPicker from "../emoji/EmojiPicker";
 import TodoList from "../todo/TodoList";
 import Settings from "../settings/Settings";
 
@@ -52,11 +52,11 @@ const DefaultLayout = () => {
 
             <Box className="mt-2 h-dvh bg-transparent">
                 <Tabs.Content value="Clipboard">
-                    <ClipsList />
+                    <ClipboardList />
                 </Tabs.Content>
 
                 <Tabs.Content value="Emoji">
-                    <EmojiList />
+                    <EmojiPicker />
                 </Tabs.Content>
 
                 <Tabs.Content value="Todo">

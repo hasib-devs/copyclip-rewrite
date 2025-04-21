@@ -5,19 +5,17 @@ export type ClipType = {
     type: "text" | "image";
     content: string;
     isPinned?: boolean;
-    timestamp: number;
+    createdAt: number;
+    lastUsed?: number;
 };
 
-export type ClipCreateType = Omit<ClipType, "id" | "timestamp">;
+export type ClipCreateType = Omit<ClipType, "id" | "createdAt">;
 
 export type ClipboardContextType = {
     clips: ClipType[];
     setClips: React.Dispatch<React.SetStateAction<ClipType[]>>;
     filteredClips: ClipType[];
     addClip: (newEntry: ClipType) => void;
-    start(): Promise<() => Promise<void>>;
-    stop(): void;
-    isRunning: boolean;
     searchQuery: string;
     setSearchQuery: Dispatch<SetStateAction<string>>;
     copyToClipboard: (content: string, type: "text" | "image") => Promise<void>;

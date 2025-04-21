@@ -1,6 +1,6 @@
 import { Button, DropdownMenu, ScrollArea, TextField } from "@radix-ui/themes";
-import ClipItem from "./ClipItem";
-import { useClipboard } from "./clipboard-context";
+import ClipboardItem from "./ClipboardItem";
+import { useClipboard } from "../../contexts/clipboard-context";
 
 import {
     Clipboard,
@@ -8,7 +8,7 @@ import {
     Search
 } from "lucide-react";
 
-const ClipsList = () => {
+const ClipboardList = () => {
     const { filteredClips } = useClipboard();
 
     return (
@@ -67,7 +67,7 @@ const ClipsList = () => {
             <ScrollArea className="flex-1">
                 <div className="p-3">
                     {filteredClips.length > 0 ? (
-                        filteredClips.map(clip => <ClipItem clip={clip} key={clip.id} />)
+                        filteredClips.map(clip => <ClipboardItem clip={clip} key={clip.id} />)
                     ) : (
                         <div className="text-center bg-white rounded-md flex justify-center items-center gap-2 flex-col py-8 text-zinc-400">
                             <Clipboard />
@@ -80,4 +80,4 @@ const ClipsList = () => {
     );
 };
 
-export default ClipsList;
+export default ClipboardList;
