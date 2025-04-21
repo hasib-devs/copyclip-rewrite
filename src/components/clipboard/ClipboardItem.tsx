@@ -2,11 +2,13 @@ import { cn } from "@/lib/utils";
 import { ClipType } from "@/types/clipboard";
 import { Copy, MoreHorizontal, Pin, Trash2 } from "lucide-react";
 import { Badge, Button, DropdownMenu } from "@radix-ui/themes";
+import { useClipboard } from "@/contexts/clipboard-context";
 
 type Props = {
     clip: ClipType;
 };
 const ClipboardItem = ({ clip }: Props) => {
+    const { deleteClip, copyToClipboard } = useClipboard();
     return (
         <div
             className={cn(
@@ -27,7 +29,9 @@ const ClipboardItem = ({ clip }: Props) => {
                         </DropdownMenu.Trigger>
                         <DropdownMenu.Content>
                             {/* Copy */}
-                            <DropdownMenu.Item >
+                            <DropdownMenu.Item
+                                onClick={() => copyToClipboard(clip.content, clip.type)}
+                            >
                                 <Copy className="mr-2 h-4 w-4" />
                                 <span>Copy</span>
                             </DropdownMenu.Item>
@@ -40,7 +44,9 @@ const ClipboardItem = ({ clip }: Props) => {
                             <DropdownMenu.Separator />
 
                             {/* Delete */}
-                            <DropdownMenu.Item color="red">
+                            <DropdownMenu.Item
+                                onClick={() => deleteClip(clip.id)}
+                                color="red">
                                 <Trash2 className="mr-2 h-4 w-4" />
                                 <span>Delete</span>
                             </DropdownMenu.Item>

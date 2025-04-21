@@ -103,5 +103,5 @@ export const useClipboardListener = ({
         return () => stop();
     }, [stop]);
 
-    return { startListening: start, stopListening: stop, abortRef, isListeningRef };
+    return { startListening: start, stopListening: stop, abortRef, isListeningRef, debounceMs, debounceTimerRef };
 };
