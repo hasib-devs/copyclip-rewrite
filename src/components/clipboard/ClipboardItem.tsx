@@ -9,17 +9,18 @@ type Props = {
 };
 const ClipboardItem = ({ clip }: Props) => {
     const { deleteClip, copyToClipboard } = useClipboard();
+    const isPined = Boolean(clip.is_pinned);
     return (
         <div
             className={cn(
                 "group p-3 mb-2 rounded-lg border transition-all",
-                clip.isPinned ? "bg-zinc-50 border-zinc-300" : "bg-white border-zinc-200 hover:border-zinc-300",
+                isPined ? "bg-zinc-50 border-zinc-300" : "bg-white border-zinc-200 hover:border-zinc-300",
             )}
         >
             <div className="flex justify-between items-start mb-1">
                 <div className="text-sm font-medium text-zinc-800 break-all line-clamp-2 flex-1 pr-2">{clip.content}</div>
                 <div className="flex items-center">
-                    {clip.isPinned && <Pin className="h-3.5 w-3.5 text-zinc-600 fill-zinc-600 mr-1" />}
+                    {isPined && <Pin className="h-3.5 w-3.5 text-zinc-600 fill-zinc-600 mr-1" />}
                     <DropdownMenu.Root>
                         <DropdownMenu.Trigger>
                             <Button size={"1"} color="gray" style={{ backgroundColor: "transparent" }} variant="soft">
@@ -30,7 +31,7 @@ const ClipboardItem = ({ clip }: Props) => {
                         <DropdownMenu.Content>
                             {/* Copy */}
                             <DropdownMenu.Item
-                                onClick={() => copyToClipboard(clip.content, clip.type)}
+                                onClick={() => copyToClipboard(clip.content, clip.content_type)}
                             >
                                 <Copy className="mr-2 h-4 w-4" />
                                 <span>Copy</span>
@@ -38,7 +39,7 @@ const ClipboardItem = ({ clip }: Props) => {
                             {/* Pin */}
                             <DropdownMenu.Item >
                                 <Pin className="mr-2 h-4 w-4" />
-                                <span>{clip.isPinned ? "Unpin" : "Pin"}</span>
+                                <span>{isPined ? "Unpin" : "Pin"}</span>
                             </DropdownMenu.Item>
 
                             <DropdownMenu.Separator />
@@ -57,9 +58,9 @@ const ClipboardItem = ({ clip }: Props) => {
                 </div>
             </div>
             <div className="flex items-center justify-between">
-                <div className="text-xs text-zinc-500">{clip.createdAt}</div>
+                <div className="text-xs text-zinc-500">{clip.created_at}</div>
                 <Badge variant="outline" style={{ padding: '0px 6px', fontSize: '10px', color: "#09090b", borderColor: "#e5e7eb", fontWeight: "600" }} radius="full" color="gray" size="1">
-                    {clip.type}
+                    {clip.content_type}
                 </Badge>
             </div>
         </div>

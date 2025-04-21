@@ -2,14 +2,13 @@ import { Dispatch, SetStateAction } from "react";
 
 export type ClipType = {
     id: string;
-    type: "text" | "image";
+    content_type: "text" | "image";
     content: string;
-    isPinned?: boolean;
-    createdAt: number;
-    lastUsed?: number;
+    is_pinned?: boolean;
+    created_at: number;
 };
 
-export type ClipCreateType = Omit<ClipType, "id" | "createdAt">;
+export type ClipCreateType = Omit<ClipType, "id" | "created_at">;
 
 export type ClipboardContextType = {
     clips: ClipType[];

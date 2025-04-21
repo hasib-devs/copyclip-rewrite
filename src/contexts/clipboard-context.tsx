@@ -5,13 +5,13 @@ import {
     createContext,
     FC,
     ReactElement,
-    useCallback,
     useContext,
     useEffect,
     useMemo,
     useState
 } from "react";
 import { writeImageBase64, writeText } from "tauri-plugin-clipboard-api";
+import { useGlobal } from "./global-context";
 
 export const ClipboardContext = createContext<ClipboardContextType | undefined>(undefined);
 
@@ -19,79 +19,69 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     const [searchQuery, setSearchQuery] = useState("");
     const [clips, setClips] = useState<ClipType[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const { db, isDbReady } = useGlobal();
 
-    const { getClips, createClip, isDbReady } = useDatabase();
+    const { getClips, createClip } = useDatabase(db);
 
     // Add a new clip
-    const addClip = useCallback(
+    const addClip =
         async (newEntry: ClipCreateType) => {
-            const exists = clips[0]?.content === newEntry.content;
-            if (exists) return;
+            setClips((prev) => {
+                const exists = prev[0]?.content === newEntry.content;
+                if (exists) return prev;
 
-            const entry: ClipType = {
-                ...newEntry,
-                id: crypto.randomUUID(),
-                createdAt: Date.now(),
-                isPinned: false,
-            };
+                const entry: ClipType = {
+                    ...newEntry,
+                    id: crypto.randomUUID(),
+                    created_at: Date.now(),
+                    is_pinned: false,
+                };
 
-            setClips((prev) => [entry, ...prev]);
+                saveClip(entry); // Save to DB
 
-            await saveClip(entry); // Save to DB
-        },
-        [clips, createClip]
-    );
+                return [entry, ...prev];
+            });
+        };
 
     // Save to DB
-    const saveClip = useCallback(async (entry: ClipType) => {
+    const saveClip = async (entry: ClipType) => {
         try {
             await createClip(entry);
-            console.log("Saved");
         } catch (error) {
             console.error('Failed to save clip to database:', error);
         }
-    }, []);
-
-    // Save to DB when clip is added
-    useEffect(() => {
-        if (clips.length > 0) {
-            saveClip(clips[0]);
-        }
-    }, [clips, saveClip]);
+    };
 
     // Delete a specific clip
-    const deleteClip = useCallback((id: string) => {
+    const deleteClip = (id: string) => {
         setClips((prev) => prev.filter((entry) => entry.id !== id));
-    }, []);
+    };
 
     // Clear clipboard history
-    const clear = useCallback(() => {
+    const clear = () => {
         setClips([]);
         // localStorage.removeItem(STORAGE_KEY);
-    }, []);
+    };
 
     // Copy to clipboard handler
-    const copyToClipboard = useCallback(
-        async (content: string, type: ClipType["type"]) => {
-            try {
-                if (type === "text") {
-                    await writeText(content);
-                } else {
-                    await writeImageBase64(content);
-                }
-                addClip({ content, type });
-            } catch (error) {
-                console.error("Failed to copy to clipboard:", error);
+    const copyToClipboard = async (content: string, type: ClipType["content_type"]) => {
+        try {
+            if (type === "text") {
+                await writeText(content);
+            } else {
+                await writeImageBase64(content);
             }
-        },
-        [addClip]
-    );
+            addClip({ content, content_type: type });
+        } catch (error) {
+            console.error("Failed to copy to clipboard:", error);
+        }
+    };
 
     // Filter search result
     const filteredClips = useMemo(() => {
         return clips.filter((entry) => {
             const matchText =
-                entry.type === "text"
+                entry.content_type === "text"
                     ? entry.content.toLowerCase().includes(searchQuery.toLowerCase())
                     : entry.content.includes(searchQuery);
             return matchText;
@@ -99,9 +89,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     }, [clips, searchQuery]);
 
     // Clipboard Listener
-    const { startListening, stopListening } = useClipboardListener({
-        onClipAdd: addClip,
-    });
+    const { startListening, stopListening } = useClipboardListener(addClip);
 
     useEffect(() => {
         startListening();
@@ -139,8 +127,6 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         clips,
         setClips,
         isLoading,
-        //   isListening,
-        //   setIsListening,
     };
 
     return <ClipboardContext.Provider value={value}>{children}</ClipboardContext.Provider>;

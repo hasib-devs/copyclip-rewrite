@@ -1,5 +1,5 @@
 import { ClipCreateType } from "@/types/clipboard";
-import { useEffect, useRef, useCallback } from "react";
+import { useRef } from "react";
 import {
     listenToMonitorStatusUpdate,
     onImageUpdate,
@@ -9,51 +9,47 @@ import {
 
 
 type UseClipboardListenerOptions = {
-    onClipAdd: (entry: ClipCreateType) => void;
+
     onRunningStatusChange?: (isRunning: boolean) => void;
     debounceMs?: number;
     deduplicate?: boolean;
     filterEmpty?: boolean;
 };
 
-export const useClipboardListener = ({
-    onClipAdd,
+export const useClipboardListener = (onClipAdd: (entry: ClipCreateType) => void, {
     onRunningStatusChange,
     debounceMs = 300,
     deduplicate = true,
     filterEmpty = true,
-}: UseClipboardListenerOptions) => {
+}: UseClipboardListenerOptions = {}, deps: unknown[] = []) => {
     const abortRef = useRef<AbortController | null>(null);
     const isListeningRef = useRef(false);
     const lastEntryRef = useRef<ClipCreateType | null>(null);
     const debounceTimerRef = useRef<number | null>();
 
-    const handleClipAdd = useCallback(
-        (entry: ClipCreateType) => {
-            const isEmpty = !entry.content || entry.content.trim?.() === "";
+    const handleClipAdd = (entry: ClipCreateType) => {
+        const isEmpty = !entry.content || entry.content.trim?.() === "";
 
-            if (filterEmpty && isEmpty) return;
-            if (
-                deduplicate &&
-                lastEntryRef.current &&
-                lastEntryRef.current.content === entry.content &&
-                lastEntryRef.current.type === entry.type
-            )
-                return;
+        if (filterEmpty && isEmpty) return;
+        if (
+            deduplicate &&
+            lastEntryRef.current &&
+            lastEntryRef.current.content === entry.content &&
+            lastEntryRef.current.content_type === entry.content_type
+        )
+            return;
 
-            lastEntryRef.current = entry;
+        lastEntryRef.current = entry;
 
-            if (debounceMs > 0) {
-                if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-                debounceTimerRef.current = setTimeout(() => onClipAdd(entry), debounceMs);
-            } else {
-                onClipAdd(entry);
-            }
-        },
-        [onClipAdd, debounceMs, deduplicate, filterEmpty]
-    );
+        if (debounceMs > 0) {
+            if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+            debounceTimerRef.current = setTimeout(() => onClipAdd(entry), debounceMs);
+        } else {
+            onClipAdd(entry);
+        }
+    };
 
-    const start = useCallback(async () => {
+    const start = async () => {
         if (isListeningRef.current) return;
 
         const controller = new AbortController();
@@ -68,11 +64,11 @@ export const useClipboardListener = ({
                 }),
                 onTextUpdate((newText) => {
                     if (signal.aborted) return;
-                    handleClipAdd({ type: "text", content: newText });
+                    handleClipAdd({ content_type: "text", content: newText });
                 }),
                 onImageUpdate((base64) => {
                     if (signal.aborted) return;
-                    handleClipAdd({ type: "image", content: base64 });
+                    handleClipAdd({ content_type: "image", content: base64 });
                 }),
             ]);
 
@@ -91,17 +87,13 @@ export const useClipboardListener = ({
             console.error("Clipboard listener error:", err);
             stop();
         }
-    }, [onRunningStatusChange, handleClipAdd]);
+    };
 
-    const stop = useCallback(() => {
+    const stop = () => {
         abortRef.current?.abort();
         abortRef.current = null;
         if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-    }, []);
+    };
 
-    useEffect(() => {
-        return () => stop();
-    }, [stop]);
-
-    return { startListening: start, stopListening: stop, abortRef, isListeningRef, debounceMs, debounceTimerRef };
+    return { startListening: start, stopListening: stop };
 };
