@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { ClipType } from "./types";
+import { ClipType } from "@/types/clipboard";
 import { Copy, MoreHorizontal, Pin, Trash2 } from "lucide-react";
 import { Badge, Button, DropdownMenu } from "@radix-ui/themes";
 
@@ -51,7 +51,7 @@ const ClipboardItem = ({ clip }: Props) => {
                 </div>
             </div>
             <div className="flex items-center justify-between">
-                <div className="text-xs text-zinc-500">{clip.timestamp}</div>
+                <div className="text-xs text-zinc-500">{clip.createdAt}</div>
                 <Badge variant="outline" style={{ padding: '0px 6px', fontSize: '10px', color: "#09090b", borderColor: "#e5e7eb", fontWeight: "600" }} radius="full" color="gray" size="1">
                     {clip.type}
                 </Badge>

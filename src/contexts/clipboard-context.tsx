@@ -1,3 +1,6 @@
+import { dummyClips } from "@/assets/data/dummy-clips";
+import { useClipboardListener } from "@/hooks/useClipboardListener";
+import { ClipboardContextType, ClipCreateType, ClipType } from "@/types/clipboard";
 import {
     createContext,
     FC,
@@ -6,13 +9,9 @@ import {
     useContext,
     useEffect,
     useMemo,
-    useRef,
-    useState,
+    useState
 } from "react";
 import { writeImageBase64, writeText } from "tauri-plugin-clipboard-api";
-import { dummyClips } from "@/assets/data/dummy-clips";
-import { useClipboardListener } from "@/hooks/useClipboardListener";
-import { ClipboardContextType, ClipCreateType, ClipType } from "@/types/clipboard";
 
 export const ClipboardContext = createContext<ClipboardContextType | undefined>(undefined);
 
@@ -35,6 +34,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
 
     // Save to DB (mocked)
     const saveClip = useCallback((entry: ClipType) => {
+        console.log("Implement DB save logic here", entry);
         // db.create(STORE_NAME, entry);
     }, []);
 
