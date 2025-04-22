@@ -15,10 +15,10 @@ export type ClipboardContextType = {
     setClips: React.Dispatch<React.SetStateAction<ClipType[]>>;
     filteredClips: ClipType[];
     addClip: (newEntry: ClipType) => void;
-    searchQuery: string;
-    setSearchQuery: Dispatch<SetStateAction<string>>;
+    searchTerm: string;
+    setSearchTerm: Dispatch<SetStateAction<string>>;
     copyToClipboard: (content: string, type: "text" | "image") => Promise<void>;
-    clear: () => void;
+    clearClips: () => void;
     deleteClip: (id: string) => void;
     isLoading: boolean;
 };

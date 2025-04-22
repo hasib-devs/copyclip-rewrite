@@ -15,11 +15,11 @@ import { writeImageBase64, writeText } from "tauri-plugin-clipboard-api";
 export const ClipboardContext = createContext<ClipboardContextType | undefined>(undefined);
 
 export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children }) => {
-    const [searchQuery, setSearchQuery] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
     const [clips, setClips] = useState<ClipType[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const { getClips, createClip } = useClipboardApi();
+    const { findAll, createOne, deleteOne } = useClipboardApi();
 
     // Add a new clip
     const addClip =
@@ -44,7 +44,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     // Save to DB
     const saveClip = async (entry: ClipType) => {
         try {
-            await createClip(entry);
+            await createOne(entry);
         } catch (error) {
             console.error('Failed to save clip to database:', error);
         }
@@ -53,10 +53,11 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     // Delete a specific clip
     const deleteClip = (id: string) => {
         setClips((prev) => prev.filter((entry) => entry.id !== id));
+        deleteOne(id);
     };
 
     // Clear clipboard history
-    const clear = () => {
+    const clearClips = () => {
         setClips([]);
         // localStorage.removeItem(STORAGE_KEY);
     };
@@ -69,7 +70,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
             } else {
                 await writeImageBase64(content);
             }
-            addClip({ content, content_type: type });
+            // addClip({ content, content_type: type });
         } catch (error) {
             console.error("Failed to copy to clipboard:", error);
         }
@@ -80,11 +81,11 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         return clips.filter((entry) => {
             const matchText =
                 entry.content_type === "text"
-                    ? entry.content.toLowerCase().includes(searchQuery.toLowerCase())
-                    : entry.content.includes(searchQuery);
+                    ? entry.content.toLowerCase().includes(searchTerm.toLowerCase())
+                    : entry.content.includes(searchTerm);
             return matchText;
         });
-    }, [clips, searchQuery]);
+    }, [clips, searchTerm]);
 
     // Clipboard Listener
     const { startListening, stopListening } = useClipboardListener(addClip);
@@ -99,7 +100,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         const loadClips = async () => {
             setIsLoading(true);
             try {
-                const storedClips = await getClips();
+                const storedClips = await findAll();
                 console.log({ storedClips });
                 setClips(storedClips);
             } catch (error) {
@@ -115,10 +116,10 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     const value: ClipboardContextType = {
         filteredClips,
         addClip,
-        searchQuery,
-        setSearchQuery,
+        searchTerm,
+        setSearchTerm,
         copyToClipboard,
-        clear,
+        clearClips,
         deleteClip,
         clips,
         setClips,

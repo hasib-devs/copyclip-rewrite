@@ -50,7 +50,7 @@ const DefaultLayout = () => {
 
             </Tabs.List>
 
-            <Box className="mt-2 h-dvh bg-transparent">
+            <Box className="h-dvh bg-transparent">
                 <Tabs.Content value="Clipboard">
                     <ClipboardList />
                 </Tabs.Content>

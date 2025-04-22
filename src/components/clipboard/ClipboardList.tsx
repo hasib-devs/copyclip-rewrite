@@ -1,5 +1,6 @@
 import { Button, DropdownMenu, ScrollArea, TextField } from "@radix-ui/themes";
 import ClipboardItem from "./ClipboardItem";
+import appIcon from "@/assets/images/app-icon.png";
 
 import {
     Clipboard,
@@ -9,20 +10,28 @@ import {
 import { useClipboardContext } from "@/contexts/clipboard-context";
 
 const ClipboardList = () => {
-    const { filteredClips } = useClipboardContext();
+    const { filteredClips, searchTerm, setSearchTerm } = useClipboardContext();
 
     return (
         <div>
-            <div className="p-4 border-b border-zinc-200 bg-white">
-                <h1 className="text-xl font-semibold text-zinc-800">Clipboard History</h1>
+            <div className="px-4 pb-4 pt-3 border-b border-zinc-200 bg-white">
+                <div className="flex items-center gap-2">
+                    <div >
+                        <img src={appIcon} alt="Copyclip" className="w-10" />
+                    </div>
+                    <h1 className="text-xl font-semibold text-zinc-800">Clipboard History</h1>
+                </div>
                 <div className="flex items-center gap-2 mt-2">
                     <div className="relative flex-1">
-                        <TextField.Root placeholder="Search…" className="focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" >
+                        <TextField.Root
+                            placeholder="Search…"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" >
                             <TextField.Slot>
                                 <Search className="text-zinc-400" height="16" width="16" />
                             </TextField.Slot>
                         </TextField.Root>
-
                     </div>
 
                     <DropdownMenu.Root>
@@ -64,7 +73,7 @@ const ClipboardList = () => {
                 </div>
             </div>
 
-            <ScrollArea className="flex-1">
+            <ScrollArea type="always" scrollbars="vertical" style={{ height: 430 }}>
                 <div className="p-3">
                     {filteredClips.length > 0 ? (
                         filteredClips.map(clip => <ClipboardItem clip={clip} key={clip.id} />)

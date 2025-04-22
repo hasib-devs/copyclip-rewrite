@@ -2,20 +2,27 @@ import '@/assets/css/style.css';
 import "@radix-ui/themes/styles.css";
 
 import DefaultLayout from "@/components/layouts/Default";
-import { ClipboardProvider } from "@/contexts/clipboard-context";
 import { Box, Theme } from "@radix-ui/themes";
+import { useDatabase } from '@/contexts/database-context';
+import { useClipboardContext } from './contexts/clipboard-context';
+import SplashScreen from '@/components/layouts/SplashScreen';
 
 
 function App() {
-  return (
-    <ClipboardProvider>
-      <Theme accentColor="teal">
-        <Box>
-          <DefaultLayout />
-        </Box>
 
-      </Theme>
-    </ClipboardProvider>
+  const { isDbReady } = useDatabase();
+  const { isLoading } = useClipboardContext();
+
+  return (
+    <Theme accentColor="teal">
+      {
+        !isDbReady || isLoading ? <SplashScreen /> : null
+      }
+      <Box>
+        <DefaultLayout />
+      </Box>
+
+    </Theme>
   );
 }
 

@@ -1,3 +1,4 @@
+import SplashScreen from "@/components/layouts/SplashScreen";
 import Database from "@tauri-apps/plugin-sql";
 import {
     createContext,
@@ -47,7 +48,7 @@ export const DatabaseProvider: FC<{ children: ReactElement; }> = ({ children }) 
     return (
         <DatabaseContext.Provider value={value}>
             {
-                isDbReady ? children : <div>Loading...</div>
+                isDbReady ? children : <SplashScreen />
             }
         </DatabaseContext.Provider>
     );

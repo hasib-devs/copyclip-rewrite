@@ -4,9 +4,8 @@ import type { ClipType } from '@/types/clipboard';
 export const useClipboardApi = () => {
     const { db } = useDatabase();
 
-    const createClip = async (clip: ClipType) => {
+    const createOne = async (clip: ClipType) => {
         if (!db) {
-            console.error("Database not ready");
             return;
         }
         try {
@@ -19,9 +18,8 @@ export const useClipboardApi = () => {
         }
     };
 
-    const getClips = async (): Promise<ClipType[]> => {
+    const findAll = async (): Promise<ClipType[]> => {
         if (!db) {
-            console.error("Database not ready");
             return [];
         }
         try {
@@ -33,9 +31,8 @@ export const useClipboardApi = () => {
         }
     };
 
-    const updateClip = async (clip: ClipType) => {
+    const updateOne = async (clip: ClipType) => {
         if (!db) {
-            console.error("Database not ready");
             return;
         }
         try {
@@ -48,9 +45,8 @@ export const useClipboardApi = () => {
         }
     };
 
-    const deleteClip = async (id: string) => {
+    const deleteOne = async (id: string) => {
         if (!db) {
-            console.error("Database not ready");
             return;
         }
         try {
@@ -60,9 +56,8 @@ export const useClipboardApi = () => {
         }
     };
 
-    const clearClips = async () => {
+    const deleteAll = async () => {
         if (!db) {
-            console.error("Database not ready");
             return;
         }
         try {
@@ -73,10 +68,10 @@ export const useClipboardApi = () => {
     };
 
     return {
-        createClip,
-        getClips,
-        updateClip,
-        deleteClip,
-        clearClips,
+        createOne,
+        findAll,
+        updateOne,
+        deleteOne,
+        deleteAll,
     };
 };
