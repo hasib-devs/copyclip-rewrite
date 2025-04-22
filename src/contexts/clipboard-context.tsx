@@ -19,7 +19,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     const [clips, setClips] = useState<ClipType[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const { findAll, createOne, deleteOne } = useClipboardApi();
+    const { findAll, createOne, deleteOne, updatePin } = useClipboardApi();
 
     // Add a new clip
     const addClip =
@@ -76,6 +76,20 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         }
     };
 
+
+    const togglePin = (clip: ClipType) => {
+        setClips((prev) => {
+            const updatedClips = prev.map((c) => {
+                if (c.id === clip.id) {
+                    return { ...c, is_pinned: !c.is_pinned };
+                }
+                return c;
+            });
+            return updatedClips;
+        });
+        updatePin(clip.id, !Boolean(clip.is_pinned));
+    };
+
     // Filter search result
     const filteredClips = useMemo(() => {
         return clips.filter((entry) => {
@@ -124,6 +138,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         clips,
         setClips,
         isLoading,
+        togglePin,
     };
 
     return <ClipboardContext.Provider value={value}>{children}</ClipboardContext.Provider>;

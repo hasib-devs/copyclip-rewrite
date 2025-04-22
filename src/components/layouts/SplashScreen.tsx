@@ -22,7 +22,7 @@ export default function SplashScreen() {
     }, []);
 
     return (
-        <div className="flex flex-col w-screen h-screen bg-gradient-to-br from-indigo-400 to-indigo-700 overflow-hidden border border-zinc-200 shadow-lg items-center justify-center">
+        <div className="flex flex-col h-[620px] w-[400px] bg-zinc-50 rounded-lg overflow-hidden border border-zinc-200 shadow-lg items-center justify-center">
             <div className="flex flex-col items-center">
                 {/* App Logo */}
                 <div className="w-24 h-24 mb-6">
@@ -34,12 +34,12 @@ export default function SplashScreen() {
                     />
                 </div>
 
-                <h1 className="text-2xl font-bold text-white mb-2">Copyclip</h1>
-                <p className="text-indigo-100 mb-6">Your clipboard, organized</p>
+                <h1 className="text-2xl font-bold text-zinc-800 mb-2">Clipboard Manager</h1>
+                <p className="text-zinc-500 mb-6">Your clipboard, organized</p>
 
                 {/* Loading bar */}
-                <div className="w-48 h-1.5 bg-indigo-200/30 rounded-full overflow-hidden">
-                    <div className="h-full bg-white transition-all duration-200 ease-out" style={{ width: `${progress}%` }} />
+                <div className="w-48 h-1.5 bg-zinc-200 rounded-full overflow-hidden">
+                    <div className="h-full bg-zinc-800 transition-all duration-200 ease-out" style={{ width: `${progress}%` }} />
                 </div>
             </div>
         </div>

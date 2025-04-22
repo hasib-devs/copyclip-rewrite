@@ -21,5 +21,6 @@ export type ClipboardContextType = {
     clearClips: () => void;
     deleteClip: (id: string) => void;
     isLoading: boolean;
+    togglePin: (clip: ClipType) => void;
 };
 

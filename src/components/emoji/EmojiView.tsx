@@ -1,5 +1,5 @@
 
-const EmojiPicker = () => {
+const EmojiView = () => {
     return (
         <div>
             <div className="p-4 border-b border-zinc-200 bg-white">
@@ -10,4 +10,4 @@ const EmojiPicker = () => {
     );
 };
 
-export default EmojiPicker;
+export default EmojiView;

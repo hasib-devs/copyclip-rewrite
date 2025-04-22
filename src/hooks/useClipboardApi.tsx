@@ -45,6 +45,21 @@ export const useClipboardApi = () => {
         }
     };
 
+    const updatePin = async (id: string, isPinned: boolean) => {
+        if (!db) {
+            return;
+        }
+
+        try {
+            await db.execute(
+                'UPDATE clips SET is_pinned = $1 WHERE id = $2',
+                [isPinned, id]
+            );
+        } catch (error) {
+            console.error('Failed to toggle pin:', error);
+        }
+    };
+
     const deleteOne = async (id: string) => {
         if (!db) {
             return;
@@ -73,5 +88,6 @@ export const useClipboardApi = () => {
         updateOne,
         deleteOne,
         deleteAll,
+        updatePin,
     };
 };

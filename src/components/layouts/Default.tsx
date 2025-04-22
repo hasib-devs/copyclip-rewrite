@@ -7,7 +7,7 @@ import {
     Settings as SettingsIcon,
     Smile
 } from "lucide-react";
-import EmojiPicker from "../emoji/EmojiPicker";
+import EmojiView from "../emoji/EmojiView";
 import TodoList from "../todo/TodoList";
 import Settings from "../settings/Settings";
 
@@ -56,7 +56,7 @@ const DefaultLayout = () => {
                 </Tabs.Content>
 
                 <Tabs.Content value="Emoji">
-                    <EmojiPicker />
+                    <EmojiView />
                 </Tabs.Content>
 
                 <Tabs.Content value="Todo">

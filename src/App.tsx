@@ -18,6 +18,7 @@ function App() {
       {
         !isDbReady || isLoading ? <SplashScreen /> : null
       }
+
       <Box>
         <DefaultLayout />
       </Box>
