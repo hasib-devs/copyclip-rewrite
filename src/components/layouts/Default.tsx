@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import EmojiView from "../emoji/EmojiView";
 import TaskList from "../tasks/TaskList";
-import Settings from "../settings/Settings";
+import SettingsView from "../settings/SettingsView";
 
 const DefaultLayout = () => {
     return (
@@ -64,7 +64,7 @@ const DefaultLayout = () => {
                 </Tabs.Content>
 
                 <Tabs.Content value="Settings">
-                    <Settings />
+                    <SettingsView />
                 </Tabs.Content>
             </Box>
         </Tabs.Root>
