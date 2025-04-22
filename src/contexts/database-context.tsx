@@ -31,6 +31,12 @@ export const DatabaseProvider: FC<{ children: ReactElement; }> = ({ children }) 
             }
         };
         initDatabase(DB_DATABASE);
+
+        return () => {
+            if (db) {
+                db.close();
+            }
+        };
     }, []);
 
     const value: DatabaseContextType = {
@@ -38,17 +44,11 @@ export const DatabaseProvider: FC<{ children: ReactElement; }> = ({ children }) 
         isDbReady,
     };
 
-    if (!isDbReady) {
-        return (
-            <div>
-                <p>Loading...</p>
-            </div>
-        );
-    }
-
     return (
         <DatabaseContext.Provider value={value}>
-            {children}
+            {
+                isDbReady ? children : <div>Loading...</div>
+            }
         </DatabaseContext.Provider>
     );
 };
