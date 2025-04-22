@@ -8,7 +8,7 @@ import {
     Smile
 } from "lucide-react";
 import EmojiView from "../emoji/EmojiView";
-import TodoList from "../todo/TodoList";
+import TaskList from "../tasks/TaskList";
 import Settings from "../settings/Settings";
 
 const DefaultLayout = () => {
@@ -36,7 +36,7 @@ const DefaultLayout = () => {
                         <div className="icon w-10 flex justify-center items-center rounded-full">
                             <ListTodo />
                         </div>
-                        <Text size="1">Todo</Text>
+                        <Text size="1">Tasks</Text>
                     </Flex>
                 </Tabs.Trigger>
                 <Tabs.Trigger title="Settings" value="Settings">
@@ -60,7 +60,7 @@ const DefaultLayout = () => {
                 </Tabs.Content>
 
                 <Tabs.Content value="Todo">
-                    <TodoList />
+                    <TaskList />
                 </Tabs.Content>
 
                 <Tabs.Content value="Settings">
