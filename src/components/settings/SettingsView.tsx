@@ -105,7 +105,7 @@ export default function SettingsView() {
             </div>
 
             {/* Settings content */}
-            <ScrollArea className="flex-1">
+            <ScrollArea style={{ height: 450 }}>
                 <div className="p-4">
                     <Accordion type="single" collapsible className="w-full" defaultValue="general">
                         {/* General Settings */}
@@ -116,26 +116,32 @@ export default function SettingsView() {
                                     <RadioGroup.Root
                                         value={settings.general.theme}
                                         onValueChange={(value) => updateSetting("general", "theme", value)}
-                                        className="flex flex-wrap gap-2"
                                     >
-                                        <div className="flex items-center space-x-2">
-                                            <RadioGroup.Item value="light" id="theme-light" />
-                                            <Text >
-                                                <Sun className="h-4 w-4 mr-1" /> Light
-                                            </Text>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            <RadioGroup.Item value="dark" id="theme-dark" />
-                                            <Text >
-                                                <Moon className="h-4 w-4 mr-1" /> Dark
-                                            </Text>
-                                        </div>
-                                        <div className="flex items-center space-x-2">
-                                            <RadioGroup.Item value="system" id="theme-system" />
-                                            <Text >
-                                                <Laptop className="h-4 w-4 mr-1" /> System
-                                            </Text>
-                                        </div>
+                                        <Flex align={"center"} gap={"4"}>
+                                            <RadioGroup.Item value="light" id="theme-light">
+                                                <Flex align={"center"}>
+                                                    <Sun className="h-4 w-4 mr-1" />
+                                                    <Text >
+                                                        Light
+                                                    </Text>
+                                                </Flex>
+                                            </RadioGroup.Item>
+                                            <RadioGroup.Item value="dark" id="theme-dark">
+                                                <Flex align={"center"}>
+                                                    <Moon className="h-4 w-4 mr-1" />
+                                                    <Text > Dark</Text>
+                                                </Flex>
+                                            </RadioGroup.Item>
+                                            <RadioGroup.Item value="system" id="theme-system">
+                                                <Flex align={"center"}>
+                                                    <Laptop className="h-4 w-4 mr-1" />
+                                                    <Text >
+                                                        System
+                                                    </Text>
+                                                </Flex>
+
+                                            </RadioGroup.Item>
+                                        </Flex>
                                     </RadioGroup.Root>
                                 </div>
 

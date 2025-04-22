@@ -73,7 +73,7 @@ const ClipboardList = () => {
                 </div>
             </div>
 
-            <ScrollArea type="always" scrollbars="vertical" style={{ height: 430 }}>
+            <ScrollArea style={{ height: 430 }}>
                 <div className="p-3">
                     {filteredClips.length > 0 ? (
                         filteredClips.map(clip => <ClipboardItem clip={clip} key={clip.id} />)

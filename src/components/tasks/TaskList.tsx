@@ -156,7 +156,7 @@ const TaskList = () => {
                 </div>
 
                 {/* TaskType list */}
-                <ScrollArea className="flex-1">
+                <ScrollArea style={{ height: 430 }}>
                     <div className="p-3">
                         {sortedTodos.length > 0 ? (
                             sortedTodos.map((todo) => (
