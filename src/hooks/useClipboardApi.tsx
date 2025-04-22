@@ -1,7 +1,8 @@
+import { useDatabase } from '@/contexts/database-context';
 import type { ClipType } from '@/types/clipboard';
-import Database from '@tauri-apps/plugin-sql';
 
-export const useDatabase = (db?: Database) => {
+export const useClipboardApi = () => {
+    const { db } = useDatabase();
 
     const createClip = async (clip: ClipType) => {
         if (!db) {

@@ -1,15 +1,15 @@
 import { Button, DropdownMenu, ScrollArea, TextField } from "@radix-ui/themes";
 import ClipboardItem from "./ClipboardItem";
-import { useClipboard } from "../../contexts/clipboard-context";
 
 import {
     Clipboard,
     Filter,
     Search
 } from "lucide-react";
+import { useClipboardContext } from "@/contexts/clipboard-context";
 
 const ClipboardList = () => {
-    const { filteredClips } = useClipboard();
+    const { filteredClips } = useClipboardContext();
 
     return (
         <div>

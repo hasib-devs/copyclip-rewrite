@@ -21,7 +21,7 @@ export const useClipboardListener = (onClipAdd: (entry: ClipCreateType) => void,
     debounceMs = 300,
     deduplicate = true,
     filterEmpty = true,
-}: UseClipboardListenerOptions = {}, deps: unknown[] = []) => {
+}: UseClipboardListenerOptions = {}) => {
     const abortRef = useRef<AbortController | null>(null);
     const isListeningRef = useRef(false);
     const lastEntryRef = useRef<ClipCreateType | null>(null);

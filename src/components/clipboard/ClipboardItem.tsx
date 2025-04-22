@@ -2,13 +2,13 @@ import { cn } from "@/lib/utils";
 import { ClipType } from "@/types/clipboard";
 import { Copy, MoreHorizontal, Pin, Trash2 } from "lucide-react";
 import { Badge, Button, DropdownMenu } from "@radix-ui/themes";
-import { useClipboard } from "@/contexts/clipboard-context";
+import { useClipboardContext } from "@/contexts/clipboard-context";
 
 type Props = {
     clip: ClipType;
 };
 const ClipboardItem = ({ clip }: Props) => {
-    const { deleteClip, copyToClipboard } = useClipboard();
+    const { deleteClip, copyToClipboard } = useClipboardContext();
     const isPined = Boolean(clip.is_pinned);
     return (
         <div

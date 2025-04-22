@@ -1,5 +1,5 @@
+import { useClipboardApi } from "@/hooks/useClipboardApi";
 import { useClipboardListener } from "@/hooks/useClipboardListener";
-import { useDatabase } from "@/hooks/useDatabase";
 import { ClipboardContextType, ClipCreateType, ClipType } from "@/types/clipboard";
 import {
     createContext,
@@ -11,7 +11,6 @@ import {
     useState
 } from "react";
 import { writeImageBase64, writeText } from "tauri-plugin-clipboard-api";
-import { useGlobal } from "./global-context";
 
 export const ClipboardContext = createContext<ClipboardContextType | undefined>(undefined);
 
@@ -19,9 +18,8 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     const [searchQuery, setSearchQuery] = useState("");
     const [clips, setClips] = useState<ClipType[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const { db, isDbReady } = useGlobal();
 
-    const { getClips, createClip } = useDatabase(db);
+    const { getClips, createClip } = useClipboardApi();
 
     // Add a new clip
     const addClip =
@@ -98,8 +96,6 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
 
     // Load clips from the database on mount
     useEffect(() => {
-        if (!isDbReady) return;
-
         const loadClips = async () => {
             setIsLoading(true);
             try {
@@ -114,7 +110,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         };
 
         loadClips();
-    }, [isDbReady]);
+    }, []);
 
     const value: ClipboardContextType = {
         filteredClips,
@@ -132,7 +128,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     return <ClipboardContext.Provider value={value}>{children}</ClipboardContext.Provider>;
 };
 
-export const useClipboard = () => {
+export const useClipboardContext = () => {
     const ctx = useContext(ClipboardContext);
     if (!ctx) throw new Error("useClipboard must be used within a ClipboardProvider");
     return ctx;

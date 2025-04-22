@@ -8,20 +8,20 @@ import {
     useState
 } from "react";
 
-type GlobalContextType = {
+type DatabaseContextType = {
     db?: Database;
     isDbReady: boolean;
 };
 
-export const GlobalContext = createContext<GlobalContextType | undefined>(undefined);
+export const DatabaseContext = createContext<DatabaseContextType | undefined>(undefined);
 const DB_DATABASE = import.meta.env.DB_DATABASE || "sqlite:copyclip.db";
 
-export const GlobalProvider: FC<{ children: ReactElement; }> = ({ children }) => {
+export const DatabaseProvider: FC<{ children: ReactElement; }> = ({ children }) => {
     const [db, setDb] = useState<Database | undefined>(undefined);
     const [isDbReady, setIsDbReady] = useState(false);
 
     useEffect(() => {
-        const initDb = async (dbPath: string) => {
+        const initDatabase = async (dbPath: string) => {
             try {
                 const database = await Database.load(dbPath);
                 setDb(database);
@@ -30,10 +30,10 @@ export const GlobalProvider: FC<{ children: ReactElement; }> = ({ children }) =>
                 console.error('Failed to load database:', error);
             }
         };
-        initDb(DB_DATABASE);
+        initDatabase(DB_DATABASE);
     }, []);
 
-    const value: GlobalContextType = {
+    const value: DatabaseContextType = {
         db,
         isDbReady,
     };
@@ -47,14 +47,14 @@ export const GlobalProvider: FC<{ children: ReactElement; }> = ({ children }) =>
     }
 
     return (
-        <GlobalContext.Provider value={value}>
+        <DatabaseContext.Provider value={value}>
             {children}
-        </GlobalContext.Provider>
+        </DatabaseContext.Provider>
     );
 };
 
-export const useGlobal = () => {
-    const ctx = useContext(GlobalContext);
-    if (!ctx) throw new Error("useGlobal must be used within a GlobalProvider");
+export const useDatabase = () => {
+    const ctx = useContext(DatabaseContext);
+    if (!ctx) throw new Error("useDatabase must be used within a DatabaseProvider");
     return ctx;
 };
