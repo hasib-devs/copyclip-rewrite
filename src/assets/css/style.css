@@ -28,3 +28,8 @@ body {
 .rt-BaseTabListTrigger:where([data-state='active']) .icon {
     background-color: #f4f4f5;
 }
+
+.EmojiPickerReact.epr_-khp9xq {
+    --epr-picker-border-radius: 0px;
+    border-width: 0px;
+}
