@@ -14,7 +14,7 @@ import Settings from "../settings/Settings";
 const DefaultLayout = () => {
     return (
         <Tabs.Root defaultValue="Clipboard">
-            <Tabs.List className="header-tab-list bg-white" data-tauri-drag-region justify="center" color="gray" highContrast>
+            <Tabs.List className="header-tab-list bg-white mb-2" data-tauri-drag-region justify="center" color="gray" highContrast>
                 <Tabs.Trigger title="Clipboard" value="Clipboard">
                     <Flex direction="column" justify="center" align="center">
                         <div className="icon w-10 flex justify-center items-center rounded-full">

@@ -14,7 +14,7 @@ function App() {
   const { isLoading } = useClipboardContext();
 
   return (
-    <Theme accentColor="teal">
+    <Theme accentColor="teal" hasBackground className='bg-zinc-50'>
       {
         !isDbReady || isLoading ? <SplashScreen /> : null
       }

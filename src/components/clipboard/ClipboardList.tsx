@@ -13,7 +13,7 @@ const ClipboardList = () => {
     const { filteredClips, searchTerm, setSearchTerm } = useClipboardContext();
 
     return (
-        <div>
+        <>
             <div className="px-4 pb-4 pt-3 border-b border-zinc-200 bg-white">
                 <div className="flex items-center gap-2">
                     <div >
@@ -85,7 +85,7 @@ const ClipboardList = () => {
                     )}
                 </div>
             </ScrollArea>
-        </div>
+        </>
     );
 };
 
