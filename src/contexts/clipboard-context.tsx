@@ -1,6 +1,6 @@
 import { useClipboardApi } from "@/hooks/useClipboardApi";
 import { useClipboardListener } from "@/hooks/useClipboardListener";
-import { ClearOptions, ClipboardContextType, ClipCreateType, ClipType } from "@/types/clipboard";
+import { ClearOptions, ClipboardContextType, ClipCreateType, ClipType, ContentTypes } from "@/types/clipboard";
 import {
     createContext,
     FC,
@@ -16,6 +16,7 @@ export const ClipboardContext = createContext<ClipboardContextType | undefined>(
 
 export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children }) => {
     const [searchTerm, setSearchTerm] = useState("");
+    const [filterTerm, setFilterTerm] = useState<ContentTypes | "">("");
     const [clips, setClips] = useState<ClipType[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -87,7 +88,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         }
     };
 
-
+    // Toggle pin status
     const togglePin = (clip: ClipType) => {
         setClips((prev) => {
             const updatedClips = prev.map((c) => {
@@ -104,13 +105,12 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     // Filter search result
     const filteredClips = useMemo(() => {
         return clips.filter((entry) => {
-            const matchText =
-                entry.content_type === "text"
-                    ? entry.content.toLowerCase().includes(searchTerm.toLowerCase())
-                    : entry.content.includes(searchTerm);
-            return matchText;
+            // Filter by content type and search term
+            const matchesType = filterTerm ? entry.content_type === filterTerm : true;
+            const matchesSearch = entry.content.toLowerCase().includes(searchTerm.toLowerCase());
+            return matchesType && matchesSearch;
         });
-    }, [clips, searchTerm]);
+    }, [clips, searchTerm, filterTerm]);
 
     // Clipboard Listener
     const { startListening, stopListening } = useClipboardListener(addClip);
@@ -143,6 +143,8 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         addClip,
         searchTerm,
         setSearchTerm,
+        filterTerm,
+        setFilterTerm,
         copyToClipboard,
         clearClips,
         deleteClip,

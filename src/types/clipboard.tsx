@@ -1,8 +1,9 @@
 import { Dispatch, SetStateAction } from "react";
 
+export type ContentTypes = "text" | "image";
 export type ClipType = {
     id: string;
-    content_type: "text" | "image";
+    content_type: ContentTypes;
     content: string;
     is_pinned?: boolean;
     created_at: number;
@@ -17,6 +18,8 @@ export type ClipboardContextType = {
     addClip: (newEntry: ClipType) => void;
     searchTerm: string;
     setSearchTerm: Dispatch<SetStateAction<string>>;
+    filterTerm: string | "";
+    setFilterTerm: Dispatch<SetStateAction<ContentTypes | "">>;
     copyToClipboard: (content: string, type: "text" | "image") => Promise<void>;
     clearClips: (opt: ClearOptions) => void;
     deleteClip: (id: string) => void;
