@@ -56,7 +56,7 @@ const ClipboardList = () => {
                             aria-checked={true}
                             onValueChange={(index: string) => {
                                 const clip = filteredClips[Number(index)];
-
+                                if (!clip) return;
                                 // setSelectedIndex(Number(index));
                                 copyToClipboard(clip.content, clip.content_type);
                             }}

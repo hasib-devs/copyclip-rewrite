@@ -1,10 +1,21 @@
 import { useClipboardContext } from "@/contexts/clipboard-context";
 import { Button, DropdownMenu } from "@radix-ui/themes";
-import { Filter } from "lucide-react";
+import { ClipboardType, Filter, Image } from "lucide-react";
 
 const FilterAction = () => {
 
-    const { setFilterTerm } = useClipboardContext();
+    const { setFilterTerm, filterTerm } = useClipboardContext();
+
+    const renderFilterIcon = () => {
+        switch (filterTerm) {
+            case "text":
+                return <ClipboardType className="h-4 w-4" />;
+            case "image":
+                return <Image className="h-4 w-4" />;
+            default:
+                return <Filter className="h-4 w-4" />;
+        }
+    };
 
     return (
         <DropdownMenu.Root>
@@ -14,7 +25,7 @@ const FilterAction = () => {
                     style={{ paddingLeft: "var(--space-2)", paddingRight: "var(--space-2)" }}
                     color="gray"
                 >
-                    <Filter className="h-4 w-4" />
+                    {renderFilterIcon()}
                 </Button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content align="end">

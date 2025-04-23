@@ -18,7 +18,7 @@ type UseClipboardListenerOptions = {
 
 export const useClipboardListener = (onClipAdd: (entry: ClipCreateType) => void, {
     onRunningStatusChange,
-    debounceMs = 300,
+    debounceMs = 200,
     deduplicate = true,
     filterEmpty = true,
 }: UseClipboardListenerOptions = {}) => {
@@ -40,13 +40,13 @@ export const useClipboardListener = (onClipAdd: (entry: ClipCreateType) => void,
             return;
 
         lastEntryRef.current = entry;
+        onClipAdd(entry);
 
-        if (debounceMs > 0) {
-            if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-            debounceTimerRef.current = setTimeout(() => onClipAdd(entry), debounceMs);
-        } else {
-            onClipAdd(entry);
-        }
+        // if (debounceMs > 0) {
+        //     if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+        //     debounceTimerRef.current = setTimeout(() => onClipAdd(entry), debounceMs);
+        // } else {
+        // }
     };
 
     const start = async () => {
