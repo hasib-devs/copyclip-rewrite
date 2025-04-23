@@ -1,5 +1,6 @@
 import placeholderImage from "@/assets/images/placeholder-image.svg";
 import { useClipboardContext } from "@/contexts/clipboard-context";
+import { timeAgo } from "@/lib/utils";
 import { ClipType } from "@/types/clipboard";
 import { Avatar, Badge, ContextMenu } from "@radix-ui/themes";
 import { Copy, Pin, Trash2 } from "lucide-react";
@@ -55,7 +56,7 @@ const ClipboardItem = ({ clip, index }: Props) => {
                             {renderContent()}
 
                             {/* Timestamp */}
-                            <div className="text-xs text-zinc-500">{clip.created_at}</div>
+                            <div className="text-xs text-zinc-500">{timeAgo(clip.accesed_at)}</div>
                         </div>
 
                         <div
