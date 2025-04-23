@@ -13,10 +13,10 @@ const ItemAction = ({ clip }: Props) => {
 
     return (
         <div className="flex items-center">
-            {isPined && <Pin onClick={() => togglePin(clip)} className="h-3.5 w-3.5 text-zinc-600 fill-zinc-600 mr-1" />}
+            {/* {isPined && <Pin onClick={() => togglePin(clip)} className="h-3.5 w-3.5 text-zinc-600 fill-zinc-600 mr-1" />} */}
 
             <DropdownMenu.Root>
-                <DropdownMenu.Trigger >
+                <DropdownMenu.Trigger>
                     <Button size={"1"} color="gray" style={{ backgroundColor: "transparent" }} variant="soft">
                         <MoreHorizontal className="h-4 w-4 cursor-context-menu" />
                     </Button>

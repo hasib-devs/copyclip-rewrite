@@ -1,18 +1,23 @@
-import { Button, DropdownMenu, ScrollArea, TextField } from "@radix-ui/themes";
-import ClipboardItem from "./ClipboardItem";
 import appIcon from "@/assets/images/app-icon.png";
+import { ScrollArea, TextField } from "@radix-ui/themes";
+import ClipboardItem from "./ClipboardItem";
 
+import { useClipboardContext } from "@/contexts/clipboard-context";
 import {
     Clipboard,
-    Filter,
     Search
 } from "lucide-react";
-import { useClipboardContext } from "@/contexts/clipboard-context";
+import { ToggleGroup } from "radix-ui";
+import { useEffect } from "react";
 import FilterAction from "./FilterAction";
 import MenuAction from "./MenuAction";
 
 const ClipboardList = () => {
-    const { filteredClips, searchTerm, setSearchTerm } = useClipboardContext();
+    const { filteredClips, searchTerm, setSearchTerm, copyToClipboard } = useClipboardContext();
+
+    useEffect(() => {
+        console.log("Rendering ClipboardList");
+    }, []);
 
     return (
         <>
@@ -41,10 +46,23 @@ const ClipboardList = () => {
                 </div>
             </div>
 
-            <ScrollArea style={{ height: 430 }}>
+            <ScrollArea style={{ height: 430 }} aria-checked={false} >
                 <div className="p-3">
                     {filteredClips.length > 0 ? (
-                        filteredClips.map(clip => <ClipboardItem clip={clip} key={clip.id} />)
+                        <ToggleGroup.Root
+                            type="single"
+                            orientation="vertical"
+                            loop={false}
+                            aria-checked={true}
+                            onValueChange={(index: string) => {
+                                const clip = filteredClips[Number(index)];
+
+                                // setSelectedIndex(Number(index));
+                                copyToClipboard(clip.content, clip.content_type);
+                            }}
+                        >
+                            {filteredClips.map((clip, index) => <ClipboardItem clip={clip} key={clip.id} index={index} />)}
+                        </ToggleGroup.Root>
                     ) : (
                         <div className="text-center bg-white rounded-md flex justify-center items-center gap-2 flex-col py-8 text-zinc-400">
                             <Clipboard />

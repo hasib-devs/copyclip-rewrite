@@ -13,9 +13,9 @@ import SettingsView from "../settings/SettingsView";
 
 const DefaultLayout = () => {
     return (
-        <Tabs.Root defaultValue="Clipboard">
-            <Tabs.List className="header-tab-list bg-white mb-2" data-tauri-drag-region justify="center" color="gray" highContrast>
-                <Tabs.Trigger title="Clipboard" value="Clipboard">
+        <Tabs.Root aria-checked={false} defaultValue="Clipboard">
+            <Tabs.List aria-checked={false} className="header-tab-list bg-white mb-2" data-tauri-drag-region justify="center" color="gray" highContrast>
+                <Tabs.Trigger aria-checked={false} title="Clipboard" value="Clipboard">
                     <Flex direction="column" justify="center" align="center">
                         <div className="icon w-10 flex justify-center items-center rounded-full">
                             <Clipboard />
@@ -23,7 +23,7 @@ const DefaultLayout = () => {
                         <Text size="1">Clipboard</Text>
                     </Flex>
                 </Tabs.Trigger>
-                <Tabs.Trigger title="Emoji" value="Emoji">
+                <Tabs.Trigger aria-checked={false} title="Emoji" value="Emoji">
                     <Flex direction="column" justify="center" align="center">
                         <div className="icon w-10 flex justify-center items-center rounded-full">
                             <Smile />
@@ -31,7 +31,7 @@ const DefaultLayout = () => {
                         <Text size="1">Emoji</Text>
                     </Flex>
                 </Tabs.Trigger>
-                <Tabs.Trigger title="Todo" value="Todo">
+                <Tabs.Trigger aria-checked={false} title="Todo" value="Todo">
                     <Flex direction="column" justify="center" align="center">
                         <div className="icon w-10 flex justify-center items-center rounded-full">
                             <ListTodo />
@@ -39,7 +39,7 @@ const DefaultLayout = () => {
                         <Text size="1">Tasks</Text>
                     </Flex>
                 </Tabs.Trigger>
-                <Tabs.Trigger title="Settings" value="Settings">
+                <Tabs.Trigger aria-checked={false} title="Settings" value="Settings">
                     <Flex direction="column" justify="center" align="center">
                         <div className="icon w-10 flex justify-center items-center rounded-full">
                             <SettingsIcon />

@@ -15,7 +15,7 @@ const EmojiView = () => {
             </div>
 
             <div className="flex-1 overflow-hidden">
-                <EmojiPicker width={"100%"} height={468} style={{ borderRadius: "0px" }} />
+                <EmojiPicker autoFocusSearch={false} width={"100%"} height={468} style={{ borderRadius: "0px" }} />
             </div>
         </>
     );

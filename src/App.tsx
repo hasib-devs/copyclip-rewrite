@@ -6,9 +6,10 @@ import SplashScreen from '@/components/layouts/SplashScreen';
 import { useDatabase } from '@/contexts/database-context';
 import { Box, Theme } from "@radix-ui/themes";
 import { useClipboardContext } from './contexts/clipboard-context';
+import { useVimMotion } from './hooks/useVimMotion';
 
 function App() {
-
+  useVimMotion();
   const { isDbReady } = useDatabase();
   const { isLoading } = useClipboardContext();
 
