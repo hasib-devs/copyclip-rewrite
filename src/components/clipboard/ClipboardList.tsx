@@ -8,6 +8,8 @@ import {
     Search
 } from "lucide-react";
 import { useClipboardContext } from "@/contexts/clipboard-context";
+import FilterAction from "./FilterAction";
+import MenuAction from "./MenuAction";
 
 const ClipboardList = () => {
     const { filteredClips, searchTerm, setSearchTerm } = useClipboardContext();
@@ -34,42 +36,8 @@ const ClipboardList = () => {
                         </TextField.Root>
                     </div>
 
-                    <DropdownMenu.Root>
-                        <DropdownMenu.Trigger>
-                            <Button
-                                variant="outline"
-                                style={{ paddingLeft: "var(--space-2)", paddingRight: "var(--space-2)" }}
-                                color="gray"
-                            >
-                                <Filter className="h-4 w-4" />
-                            </Button>
-                        </DropdownMenu.Trigger>
-                        <DropdownMenu.Content>
-                            <DropdownMenu.Item shortcut="⌘ E">Edit</DropdownMenu.Item>
-                            <DropdownMenu.Item shortcut="⌘ D">Duplicate</DropdownMenu.Item>
-                            <DropdownMenu.Separator />
-                            <DropdownMenu.Item shortcut="⌘ N">Archive</DropdownMenu.Item>
-
-                            <DropdownMenu.Sub>
-                                <DropdownMenu.SubTrigger>More</DropdownMenu.SubTrigger>
-                                <DropdownMenu.SubContent>
-                                    <DropdownMenu.Item>Move to project…</DropdownMenu.Item>
-                                    <DropdownMenu.Item>Move to folder…</DropdownMenu.Item>
-
-                                    <DropdownMenu.Separator />
-                                    <DropdownMenu.Item>Advanced options…</DropdownMenu.Item>
-                                </DropdownMenu.SubContent>
-                            </DropdownMenu.Sub>
-
-                            <DropdownMenu.Separator />
-                            <DropdownMenu.Item>Share</DropdownMenu.Item>
-                            <DropdownMenu.Item>Add to favorites</DropdownMenu.Item>
-                            <DropdownMenu.Separator />
-                            <DropdownMenu.Item shortcut="⌘ ⌫" color="red">
-                                Delete
-                            </DropdownMenu.Item>
-                        </DropdownMenu.Content>
-                    </DropdownMenu.Root>
+                    <FilterAction />
+                    <MenuAction />
                 </div>
             </div>
 

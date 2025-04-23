@@ -18,9 +18,14 @@ export type ClipboardContextType = {
     searchTerm: string;
     setSearchTerm: Dispatch<SetStateAction<string>>;
     copyToClipboard: (content: string, type: "text" | "image") => Promise<void>;
-    clearClips: () => void;
+    clearClips: (opt: ClearOptions) => void;
     deleteClip: (id: string) => void;
     isLoading: boolean;
     togglePin: (clip: ClipType) => void;
 };
 
+export enum ClearOptions {
+    Pined,
+    Unpined,
+    All
+}

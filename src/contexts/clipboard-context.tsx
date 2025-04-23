@@ -1,6 +1,6 @@
 import { useClipboardApi } from "@/hooks/useClipboardApi";
 import { useClipboardListener } from "@/hooks/useClipboardListener";
-import { ClipboardContextType, ClipCreateType, ClipType } from "@/types/clipboard";
+import { ClearOptions, ClipboardContextType, ClipCreateType, ClipType } from "@/types/clipboard";
 import {
     createContext,
     FC,
@@ -56,10 +56,21 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         deleteOne(id);
     };
 
-    // Clear clipboard history
-    const clearClips = () => {
-        setClips([]);
-        // localStorage.removeItem(STORAGE_KEY);
+    // Clear clipboard history without pinnded items
+    const clearClips = (opt: ClearOptions) => {
+        switch (opt) {
+            case ClearOptions.All:
+                setClips(() => []);
+                break;
+
+            case ClearOptions.Pined:
+                setClips(prev => prev.filter(entry => !entry.is_pinned));
+                break;
+
+            case ClearOptions.Unpined:
+                setClips(prev => prev.filter(entry => entry.is_pinned));
+                break;
+        }
     };
 
     // Copy to clipboard handler
