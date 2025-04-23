@@ -63,12 +63,11 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
             const exists = clips[0]?.content === newEntry.content;
             if (exists) return clips;
 
-            const created_at = Date.now();
+            const accesed_at = Date.now();
             const entry: ClipType = {
                 ...newEntry,
                 id: crypto.randomUUID(),
-                created_at,
-                accesed_at: created_at,
+                accesed_at,
                 is_pinned: false,
             };
             setClips((prev) => [entry, ...prev]);

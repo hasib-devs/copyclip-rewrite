@@ -6,11 +6,10 @@ export type ClipType = {
     content_type: ContentTypes;
     content: string;
     is_pinned?: boolean;
-    created_at: number;
     accesed_at: number;
 };
 
-export type ClipCreateType = Omit<ClipType, "id" | "created_at" | "accesed_at">;
+export type ClipCreateType = Omit<ClipType, "id" | "accesed_at">;
 
 export type ClipboardContextType = {
     clips: ClipType[];
