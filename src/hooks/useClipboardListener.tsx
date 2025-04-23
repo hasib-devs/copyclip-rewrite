@@ -18,36 +18,34 @@ type UseClipboardListenerOptions = {
 
 export const useClipboardListener = (onClipAdd: (entry: ClipCreateType) => void, {
     onRunningStatusChange,
-    debounceMs = 200,
-    deduplicate = true,
-    filterEmpty = true,
+
 }: UseClipboardListenerOptions = {}) => {
     const abortRef = useRef<AbortController | null>(null);
     const isListeningRef = useRef(false);
-    const lastEntryRef = useRef<ClipCreateType | null>(null);
+    // const lastEntryRef = useRef<ClipCreateType | null>(null);
     const debounceTimerRef = useRef<number | null>();
 
-    const handleClipAdd = (entry: ClipCreateType) => {
-        const isEmpty = !entry.content || entry.content.trim?.() === "";
+    // const handleClipAdd = (entry: ClipCreateType) => {
+    //     const isEmpty = !entry.content || entry.content.trim?.() === "";
 
-        if (filterEmpty && isEmpty) return;
-        if (
-            deduplicate &&
-            lastEntryRef.current &&
-            lastEntryRef.current.content === entry.content &&
-            lastEntryRef.current.content_type === entry.content_type
-        )
-            return;
+    //     if (filterEmpty && isEmpty) return;
+    //     if (
+    //         deduplicate &&
+    //         lastEntryRef.current &&
+    //         lastEntryRef.current.content === entry.content &&
+    //         lastEntryRef.current.content_type === entry.content_type
+    //     )
+    //         return;
 
-        lastEntryRef.current = entry;
-        onClipAdd(entry);
+    //     lastEntryRef.current = entry;
 
-        // if (debounceMs > 0) {
-        //     if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-        //     debounceTimerRef.current = setTimeout(() => onClipAdd(entry), debounceMs);
-        // } else {
-        // }
-    };
+    //     if (debounceMs > 0) {
+    //         if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    //         debounceTimerRef.current = setTimeout(() => onClipAdd(entry), debounceMs);
+    //     } else {
+    //         onClipAdd(entry);
+    //     }
+    // };
 
     const start = async () => {
         if (isListeningRef.current) return;
@@ -64,11 +62,11 @@ export const useClipboardListener = (onClipAdd: (entry: ClipCreateType) => void,
                 }),
                 onTextUpdate((newText) => {
                     if (signal.aborted) return;
-                    handleClipAdd({ content_type: "text", content: newText });
+                    onClipAdd({ content_type: "text", content: newText });
                 }),
                 onImageUpdate((base64) => {
                     if (signal.aborted) return;
-                    handleClipAdd({ content_type: "image", content: base64 });
+                    onClipAdd({ content_type: "image", content: base64 });
                 }),
             ]);
 

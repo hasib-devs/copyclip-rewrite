@@ -1,10 +1,10 @@
 import { initialTodos, PRIORITIES } from "@/assets/data/tasks";
+import { cn } from "@/lib/utils";
 import { Priority, TaskType } from "@/types/tasks";
-import { Button, Dialog, DropdownMenu, Flex, Popover, ScrollArea, Text, TextArea, TextField } from "@radix-ui/themes";
+import { Button, Dialog, DropdownMenu, Flex, Popover, ScrollArea, TextArea } from "@radix-ui/themes";
 import { CalendarIcon, Check, Flag, ListTodo, Plus, SquareX } from "lucide-react";
 import { useState } from "react";
 import TaskItem from "./TaskItem";
-import { cn } from "@/lib/utils";
 
 const TaskList = () => {
     // Initial todos
@@ -49,22 +49,22 @@ const TaskList = () => {
     });
 
     // Add a new todo
-    const addTodo = () => {
-        if (newTodoText.trim() === "") return;
+    // const addTodo = () => {
+    //     if (newTodoText.trim() === "") return;
 
-        const newTodo: TaskType = {
-            id: Date.now(),
-            text: newTodoText.trim(),
-            completed: false,
-            createdAt: new Date(),
-            dueDate: null,
-            priority: "medium",
-        };
+    //     const newTodo: TaskType = {
+    //         id: Date.now(),
+    //         text: newTodoText.trim(),
+    //         completed: false,
+    //         createdAt: new Date(),
+    //         dueDate: null,
+    //         priority: "medium",
+    //     };
 
-        setTodos([...todos, newTodo]);
-        setNewTodoText("");
-        setShowAddTodo(false);
-    };
+    //     setTodos([...todos, newTodo]);
+    //     setNewTodoText("");
+    //     setShowAddTodo(false);
+    // };
 
     // Toggle todo completion
     const toggleTodoCompletion = (id: number) => {
@@ -82,12 +82,12 @@ const TaskList = () => {
     };
 
     // Save edited todo
-    const saveEditedTodo = () => {
-        if (editingTodo) {
-            setTodos(todos.map((todo) => (todo.id === editingTodo.id ? editingTodo : todo)));
-            setEditingTodo(null);
-        }
-    };
+    // const saveEditedTodo = () => {
+    //     if (editingTodo) {
+    //         setTodos(todos.map((todo) => (todo.id === editingTodo.id ? editingTodo : todo)));
+    //         setEditingTodo(null);
+    //     }
+    // };
 
     return (
         <div>

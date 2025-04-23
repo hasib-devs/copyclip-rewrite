@@ -8,6 +8,7 @@ import {
     useContext,
     useEffect,
     useMemo,
+    useRef,
     useState
 } from "react";
 import { writeImageBase64, writeText } from "tauri-plugin-clipboard-api";
@@ -19,27 +20,62 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     const [filterTerm, setFilterTerm] = useState<ContentTypes | "">("");
     const [clips, setClips] = useState<ClipType[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const lastEntryRef = useRef<ClipCreateType | null>(null);
+    const debounceTimerRef = useRef<number | null>();
+    const ignoreClip = useRef(false);
+    const ignoreId = useRef<string | undefined>();
 
     const { findAll, createOne, deleteOne, updatePin } = useClipboardApi();
 
+    const debounceMs = 200;
     // Add a new clip
     const addClip =
         async (newEntry: ClipCreateType) => {
-            setClips((prev) => {
-                const exists = prev[0]?.content === newEntry.content;
-                if (exists) return prev;
 
-                const entry: ClipType = {
-                    ...newEntry,
-                    id: crypto.randomUUID(),
-                    created_at: Date.now(),
-                    is_pinned: false,
-                };
+            console.log({ ignoreClip: ignoreClip.current });
+            if (ignoreClip.current) {
+                setClips(prev => {
+                    return prev.map(entry => {
+                        if (entry.id === ignoreId.current) {
+                            return { ...entry, accesed_at: Date.now() };
+                        }
+                        return entry;
+                    });
+                });
+                setTimeout(() => {
+                    ignoreClip.current = false;
+                }, 10);
+                return;
+            }
 
-                saveClip(entry); // Save to DB
+            const isEmpty = !newEntry.content || newEntry.content.trim?.() === "";
+            if (isEmpty) return;
 
-                return [entry, ...prev];
-            });
+            if (
+                lastEntryRef.current &&
+                lastEntryRef.current.content === newEntry.content &&
+                lastEntryRef.current.content_type === newEntry.content_type
+            )
+                return;
+
+            lastEntryRef.current = newEntry;
+
+            const exists = clips[0]?.content === newEntry.content;
+            if (exists) return clips;
+
+            const created_at = Date.now();
+            const entry: ClipType = {
+                ...newEntry,
+                id: crypto.randomUUID(),
+                created_at,
+                accesed_at: created_at,
+                is_pinned: false,
+            };
+            setClips((prev) => [entry, ...prev]);
+
+            if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+            debounceTimerRef.current = setTimeout(() => saveClip(entry), debounceMs);
+
         };
 
     // Save to DB
@@ -75,17 +111,20 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     };
 
     // Copy to clipboard handler
-    const copyToClipboard = async (content: string, type: ClipType["content_type"]) => {
+    const copyToClipboard = async (clip: ClipType) => {
+        ignoreClip.current = true;
+        ignoreId.current = clip.id;
+
         try {
-            if (type === "text") {
-                await writeText(content);
+            if (clip.content_type === "text") {
+                writeText(clip.content);
             } else {
-                await writeImageBase64(content);
+                writeImageBase64(clip.content);
             }
-            // addClip({ content, content_type: type });
         } catch (error) {
             console.error("Failed to copy to clipboard:", error);
         }
+
     };
 
     // Toggle pin status
@@ -109,7 +148,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
             const matchesType = filterTerm ? entry.content_type === filterTerm : true;
             const matchesSearch = entry.content.toLowerCase().includes(searchTerm.toLowerCase());
             return matchesType && matchesSearch;
-        });
+        }).sort((a, b) => b.accesed_at - a.accesed_at);
     }, [clips, searchTerm, filterTerm]);
 
     // Clipboard Listener
@@ -126,7 +165,6 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
             setIsLoading(true);
             try {
                 const storedClips = await findAll();
-                console.log({ storedClips });
                 setClips(storedClips);
             } catch (error) {
                 console.error('Failed to load clips from database:', error);

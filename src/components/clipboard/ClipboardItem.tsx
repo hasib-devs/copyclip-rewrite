@@ -51,7 +51,6 @@ const ClipboardItem = ({ clip, index }: Props) => {
                     <div className="mb-1 flex p-3 flex-1">
 
                         <div
-                            // onClick={() => copyToClipboard(clip.content, clip.content_type)}
                             className="text-sm font-medium text-zinc-800 break-all line-clamp-2 flex-1 pr-2">
                             {renderContent()}
 
@@ -71,7 +70,7 @@ const ClipboardItem = ({ clip, index }: Props) => {
                     </div>
                 </ContextMenu.Trigger>
                 <ContextMenu.Content>
-                    <ContextMenu.Item onClick={() => copyToClipboard(clip.content, clip.content_type)}>
+                    <ContextMenu.Item onClick={() => copyToClipboard(clip)}>
                         <Copy className="mr-2 h-4 w-4" />
                         <span>Copy</span>
                     </ContextMenu.Item>

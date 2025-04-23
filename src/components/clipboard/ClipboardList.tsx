@@ -8,17 +8,11 @@ import {
     Search
 } from "lucide-react";
 import { ToggleGroup } from "radix-ui";
-import { useEffect } from "react";
 import FilterAction from "./FilterAction";
 import MenuAction from "./MenuAction";
 
 const ClipboardList = () => {
     const { filteredClips, searchTerm, setSearchTerm, copyToClipboard } = useClipboardContext();
-
-    useEffect(() => {
-        console.log("Rendering ClipboardList");
-    }, []);
-
     return (
         <>
             <div className="px-4 pb-4 pt-3 border-b border-zinc-200 bg-white">
@@ -57,8 +51,8 @@ const ClipboardList = () => {
                             onValueChange={(index: string) => {
                                 const clip = filteredClips[Number(index)];
                                 if (!clip) return;
-                                // setSelectedIndex(Number(index));
-                                copyToClipboard(clip.content, clip.content_type);
+
+                                copyToClipboard(clip);
                             }}
                         >
                             {filteredClips.map((clip, index) => <ClipboardItem clip={clip} key={clip.id} index={index} />)}

@@ -40,7 +40,6 @@ export const useVimMotion = () => {
 
 // Simulate native arrow key press to move focus (e.g., for Radix UI or grid)
 const simulateKey = (key: "ArrowUp" | "ArrowDown" | "ArrowLeft" | "ArrowRight") => {
-    console.log("Key", key);
     const event = new KeyboardEvent("keydown", {
         key,
         bubbles: true,

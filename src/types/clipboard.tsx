@@ -7,9 +7,10 @@ export type ClipType = {
     content: string;
     is_pinned?: boolean;
     created_at: number;
+    accesed_at: number;
 };
 
-export type ClipCreateType = Omit<ClipType, "id" | "created_at">;
+export type ClipCreateType = Omit<ClipType, "id" | "created_at" | "accesed_at">;
 
 export type ClipboardContextType = {
     clips: ClipType[];
@@ -20,7 +21,7 @@ export type ClipboardContextType = {
     setSearchTerm: Dispatch<SetStateAction<string>>;
     filterTerm: string | "";
     setFilterTerm: Dispatch<SetStateAction<ContentTypes | "">>;
-    copyToClipboard: (content: string, type: "text" | "image") => Promise<void>;
+    copyToClipboard: (clip: ClipType) => Promise<void>;
     clearClips: (opt: ClearOptions) => void;
     deleteClip: (id: string) => void;
     isLoading: boolean;
