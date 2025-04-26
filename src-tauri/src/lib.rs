@@ -4,6 +4,7 @@ mod services;
 use commands::{get_clipboard_entries, greet, insert_clipboard_entry};
 use tauri::{Listener, Manager};
 use tauri_plugin_clipboard::Clipboard;
+use tauri_plugin_fs::FsExt;
 use tauri_plugin_positioner::{Position, WindowExt};
 use tauri_plugin_sql::{Migration, MigrationKind};
 
@@ -20,6 +21,7 @@ pub fn run() {
     ];
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_fs::init())
         .plugin(
             tauri_plugin_sql::Builder::default()
                 .add_migrations("sqlite:copyclip.db", migrations)
@@ -39,6 +41,9 @@ pub fn run() {
 
             // Window position setup
             let _ = win.as_ref().window().move_window(Position::RightCenter);
+
+            let scope = app.fs_scope();
+            scope.allow_directory("$HOME/*", false).unwrap();
 
             // Clipboard Monitor
             let clipboard = app_handle.state::<Clipboard>();

@@ -65,10 +65,10 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
 
             const accesed_at = Date.now();
             const entry: ClipType = {
-                ...newEntry,
                 id: crypto.randomUUID(),
-                accesed_at,
                 is_pinned: false,
+                accesed_at,
+                ...newEntry,
             };
             setClips((prev) => [entry, ...prev]);
 

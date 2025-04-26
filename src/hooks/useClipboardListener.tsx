@@ -4,9 +4,9 @@ import {
     listenToMonitorStatusUpdate,
     onImageUpdate,
     onTextUpdate,
-    startListening,
+    startListening
 } from "tauri-plugin-clipboard-api";
-
+import { writeFile, BaseDirectory } from '@tauri-apps/plugin-fs';
 
 type UseClipboardListenerOptions = {
 
@@ -22,30 +22,7 @@ export const useClipboardListener = (onClipAdd: (entry: ClipCreateType) => void,
 }: UseClipboardListenerOptions = {}) => {
     const abortRef = useRef<AbortController | null>(null);
     const isListeningRef = useRef(false);
-    // const lastEntryRef = useRef<ClipCreateType | null>(null);
     const debounceTimerRef = useRef<number | null>();
-
-    // const handleClipAdd = (entry: ClipCreateType) => {
-    //     const isEmpty = !entry.content || entry.content.trim?.() === "";
-
-    //     if (filterEmpty && isEmpty) return;
-    //     if (
-    //         deduplicate &&
-    //         lastEntryRef.current &&
-    //         lastEntryRef.current.content === entry.content &&
-    //         lastEntryRef.current.content_type === entry.content_type
-    //     )
-    //         return;
-
-    //     lastEntryRef.current = entry;
-
-    //     if (debounceMs > 0) {
-    //         if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-    //         debounceTimerRef.current = setTimeout(() => onClipAdd(entry), debounceMs);
-    //     } else {
-    //         onClipAdd(entry);
-    //     }
-    // };
 
     const start = async () => {
         if (isListeningRef.current) return;
@@ -64,9 +41,16 @@ export const useClipboardListener = (onClipAdd: (entry: ClipCreateType) => void,
                     if (signal.aborted) return;
                     onClipAdd({ content_type: "text", content: newText });
                 }),
-                onImageUpdate((base64) => {
+                onImageUpdate(async (base64Img) => {
                     if (signal.aborted) return;
-                    onClipAdd({ content_type: "image", content: base64 });
+
+                    // const buffer = new Uint8Array(
+                    //     atob(base64Img)
+                    //         .split("")
+                    //         .map((char) => char.charCodeAt(0))
+                    // );
+
+                    onClipAdd({ content_type: "image", content: base64Img });
                 }),
             ]);
 
