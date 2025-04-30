@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+html,
+body {
+    overflow: hidden;
+    background-color: #fafafa;
+}
+
+#root .radix-themes {
+    background-color: #fafafa;
+    border-color: #e4e4e7;
+}
+
+.header-tab-list .rt-BaseTabListTriggerInner.rt-TabsTriggerInner {
+    width: 70px;
+    padding: 3px 0px;
+}
+
+.header-tab-list .rt-BaseTabListTrigger {
+    padding: 5px 0px;
+    width: 70px;
+}
+
+.header-tab-list .rt-BaseTabListTrigger.rt-TabsTrigger {
+    padding: 28px 0px;
+}
+
+.rt-BaseTabListTrigger:where([data-state='active']) .icon {
+    background-color: #f4f4f5;
+}
+
+.EmojiPickerReact.epr_-khp9xq {
+    --epr-picker-border-radius: 0px;
+    border-width: 0px;
+}

@@ -1,20 +1,23 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "copyclip",
+  "productName": "Copyclip",
   "version": "0.1.0",
   "identifier": "copyclip.hasib.dev",
   "build": {
-    "beforeDevCommand": "bun run dev",
+    "beforeDevCommand": "pnpm run dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "bun run build",
+    "beforeBuildCommand": "pnpm run build",
     "frontendDist": "../dist"
   },
   "app": {
     "windows": [
       {
-        "title": "copyclip",
-        "width": 800,
-        "height": 600
+        "fullscreen": false,
+        "resizable": false,
+        "title": "Copyclip",
+        "width": 400,
+        "height": 620,
+        "decorations": false
       }
     ],
     "security": {

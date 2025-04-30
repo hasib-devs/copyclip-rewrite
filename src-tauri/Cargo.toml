@@ -20,6 +20,8 @@ features = [ ]
 tauri-plugin-opener = "2"
 serde_json = "1"
 tauri-plugin-clipboard = "2.1.11"
+tauri-plugin-sql = { version = "2", features = ["sqlite"] }
+tauri-plugin-fs = "2"
 
 
 [dependencies.tauri]
@@ -30,3 +32,6 @@ features = [ ]
 [dependencies.serde]
 version = "1"
 features = [ "derive" ]
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-positioner = "2"

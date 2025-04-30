@@ -1,24 +1,28 @@
-import '@radix-ui/themes/styles.css';
-import "./assets/style.css";
-import { Theme } from '@radix-ui/themes';
-import { HistoryList } from './components/HistoryList';
-import { ClipboardProvider } from './contexts/clipboard-context';
-import { useEffect } from 'react';
-import { invoke } from "@tauri-apps/api/core";
+import '@/assets/css/style.css';
+import "@radix-ui/themes/styles.css";
+
+import DefaultLayout from "@/components/layouts/Default";
+import SplashScreen from '@/components/layouts/SplashScreen';
+import { useDatabase } from '@/contexts/database-context';
+import { Box, Theme } from "@radix-ui/themes";
+import { useClipboardContext } from './contexts/clipboard-context';
+import { useVimMotion } from './hooks/useVimMotion';
 
 function App() {
-
-  useEffect(() => {
-    (async () => {
-      console.log(await invoke('greet'));
-    })();
-  }, []);
+  useVimMotion();
+  const { isDbReady } = useDatabase();
+  const { isLoading } = useClipboardContext();
 
   return (
-    <Theme className="w-screen h-screen bg-gray-100">
-      <ClipboardProvider>
-        <HistoryList />
-      </ClipboardProvider>
+    <Theme accentColor="teal" hasBackground className='bg-zinc-50'>
+      {
+        !isDbReady || isLoading ? <SplashScreen /> : null
+      }
+
+      <Box>
+        <DefaultLayout />
+      </Box>
+
     </Theme>
   );
 }

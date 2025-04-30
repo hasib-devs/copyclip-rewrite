@@ -7,8 +7,15 @@
   ],
   "permissions": [
     "core:default",
+    "core:window:default",
+    "core:window:allow-start-dragging",
     "opener:default",
+    "sql:default",
+    "sql:allow-execute",
     "clipboard:read-all",
-    "clipboard:monitor-all"
+    "clipboard:write-all",
+    "clipboard:monitor-all",
+    "fs:default",
+    "fs:write-all"
   ]
 }
