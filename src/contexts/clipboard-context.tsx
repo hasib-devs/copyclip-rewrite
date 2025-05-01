@@ -1,5 +1,6 @@
 import { useClipboardApi } from "@/hooks/useClipboardApi";
 import { useClipboardListener } from "@/hooks/useClipboardListener";
+import { ensureImageDirExists } from "@/lib/imageStorage";
 import { ClearOptions, ClipboardContextType, ClipCreateType, ClipType, ContentTypes } from "@/types/clipboard";
 import {
     createContext,
@@ -31,8 +32,6 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
     // Add a new clip
     const addClip =
         async (newEntry: ClipCreateType) => {
-
-            console.log({ ignoreClip: ignoreClip.current });
             if (ignoreClip.current) {
                 setClips(prev => {
                     return prev.map(entry => {
@@ -173,6 +172,13 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
         };
 
         loadClips();
+    }, []);
+
+    // Init fs plugin
+    useEffect(() => {
+        (async () => {
+            ensureImageDirExists();
+        })();
     }, []);
 
     const value: ClipboardContextType = {

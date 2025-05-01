@@ -4,7 +4,6 @@ mod services;
 use commands::{get_clipboard_entries, greet, insert_clipboard_entry};
 use tauri::{Listener, Manager};
 use tauri_plugin_clipboard::Clipboard;
-use tauri_plugin_fs::FsExt;
 use tauri_plugin_sql::{Migration, MigrationKind};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -36,9 +35,6 @@ pub fn run() {
         .setup(|app| {
             let app_handle = app.handle();
             // let win = app.get_webview_window("main").unwrap();
-
-            let scope = app.fs_scope();
-            scope.allow_directory("$HOME/*", false).unwrap();
 
             // Clipboard Monitor
             let clipboard = app_handle.state::<Clipboard>();

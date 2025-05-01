@@ -16,6 +16,13 @@
     "clipboard:write-all",
     "clipboard:monitor-all",
     "fs:default",
-    "fs:write-all"
+    {
+      "identifier": "fs:scope",
+      "allow": [{ "path": "$APPDATA" }, { "path": "$APPDATA/**" }]
+    },
+    {
+      "identifier": "fs:write-all",
+      "allow": [{ "path": "$APPDATA" }, { "path": "$APPDATA/**" }]
+    }
   ]
 }

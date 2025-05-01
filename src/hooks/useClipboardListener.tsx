@@ -6,7 +6,6 @@ import {
     onTextUpdate,
     startListening
 } from "tauri-plugin-clipboard-api";
-import { writeFile, BaseDirectory } from '@tauri-apps/plugin-fs';
 
 type UseClipboardListenerOptions = {
 
@@ -43,13 +42,6 @@ export const useClipboardListener = (onClipAdd: (entry: ClipCreateType) => void,
                 }),
                 onImageUpdate(async (base64Img) => {
                     if (signal.aborted) return;
-
-                    // const buffer = new Uint8Array(
-                    //     atob(base64Img)
-                    //         .split("")
-                    //         .map((char) => char.charCodeAt(0))
-                    // );
-
                     onClipAdd({ content_type: "image", content: base64Img });
                 }),
             ]);

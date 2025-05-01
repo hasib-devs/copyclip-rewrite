@@ -9,7 +9,9 @@ export type ClipType = {
     accesed_at: number;
 };
 
-export type ClipCreateType = Omit<ClipType, "id" | "accesed_at">;
+export type ClipCreateType = Omit<ClipType, "id" | "accesed_at"> & {
+    id?: string;
+};
 
 export type ClipboardContextType = {
     clips: ClipType[];
