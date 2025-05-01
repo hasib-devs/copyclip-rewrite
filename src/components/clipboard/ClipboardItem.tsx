@@ -56,7 +56,7 @@ const ClipboardItem = ({ clip, index }: Props) => {
                             {renderContent()}
 
                             {/* Timestamp */}
-                            <div className="text-xs text-zinc-500">{timeAgo(clip.accesed_at)}</div>
+                            <div className="text-xs text-zinc-500">{timeAgo(clip.timestamp)}</div>
                         </div>
 
                         <div

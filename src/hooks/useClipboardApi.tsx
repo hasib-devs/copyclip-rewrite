@@ -10,8 +10,8 @@ export const useClipboardApi = () => {
         }
         try {
             await db.execute(
-                'INSERT INTO clips (id, content_type, content, accesed_at) VALUES ($1, $2, $3, $4)',
-                [clip.id, clip.content_type, clip.content, clip.accesed_at]
+                'INSERT INTO clips (id, content_type, content, timestamp) VALUES ($1, $2, $3, $4)',
+                [clip.id, clip.content_type, clip.content, clip.timestamp]
             );
         } catch (error) {
             console.error('Failed to create clip:', error);
@@ -37,8 +37,8 @@ export const useClipboardApi = () => {
         }
         try {
             await db.execute(
-                'UPDATE clips SET type = $1, content = $2, accesed_at = $3 WHERE id = $4',
-                [clip.content_type, clip.content, clip.accesed_at, clip.id]
+                'UPDATE clips SET type = $1, content = $2, timestamp = $3 WHERE id = $4',
+                [clip.content_type, clip.content, clip.timestamp, clip.id]
             );
         } catch (error) {
             console.error('Failed to update clip:', error);

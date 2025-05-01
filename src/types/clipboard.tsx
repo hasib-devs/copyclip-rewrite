@@ -6,10 +6,10 @@ export type ClipType = {
     content_type: ContentTypes;
     content: string;
     is_pinned?: boolean;
-    accesed_at: number;
+    timestamp: number;
 };
 
-export type ClipCreateType = Omit<ClipType, "id" | "accesed_at"> & {
+export type ClipCreateType = Omit<ClipType, "id" | "timestamp"> & {
     id?: string;
 };
 

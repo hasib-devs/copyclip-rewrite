@@ -36,7 +36,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
                 setClips(prev => {
                     return prev.map(entry => {
                         if (entry.id === ignoreId.current) {
-                            return { ...entry, accesed_at: Date.now() };
+                            return { ...entry, timestamp: Date.now() };
                         }
                         return entry;
                     });
@@ -62,11 +62,11 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
             const exists = clips[0]?.content === newEntry.content;
             if (exists) return clips;
 
-            const accesed_at = Date.now();
+            const timestamp = Date.now();
             const entry: ClipType = {
                 id: crypto.randomUUID(),
                 is_pinned: false,
-                accesed_at,
+                timestamp,
                 ...newEntry,
             };
             setClips((prev) => [entry, ...prev]);
@@ -146,7 +146,7 @@ export const ClipboardProvider: FC<{ children: ReactElement; }> = ({ children })
             const matchesType = filterTerm ? entry.content_type === filterTerm : true;
             const matchesSearch = entry.content.toLowerCase().includes(searchTerm.toLowerCase());
             return matchesType && matchesSearch;
-        }).sort((a, b) => b.accesed_at - a.accesed_at);
+        }).sort((a, b) => b.timestamp - a.timestamp);
     }, [clips, searchTerm, filterTerm]);
 
     // Clipboard Listener
